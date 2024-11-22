@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import HeaderMenu from "../stallcompo/HeaderMenu";
+//import HeaderMenu from "../stallcompo/HeaderMenu";
 import 'bootstrap/dist/css/bootstrap.min.css'; 
 import shoplogo from "../assets/shoplogo.png"
 import {Dropdown} from 'react-bootstrap';

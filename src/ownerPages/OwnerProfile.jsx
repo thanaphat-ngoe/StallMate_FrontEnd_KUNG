@@ -277,17 +277,6 @@ const OwnerProfile = () => {
   return (
     profilePresence ? (
       <div className="container-fluid">
-      <div
-        className={`container-fluid fixed-top bg-black`}
-        style={{ height: "7%" }}
-      >
-        <img
-          className="mt-3"
-          src="src/assets/arrow-left.svg"
-          alt="arrow-left-icon"
-          onClick={handleBackBtn}
-        />
-      </div>
       <div className="container-fluid mt-5">
         <div className={`row ${style.content}`}>
           <div className="col-7 d-flex flex-column justify-content-center">
