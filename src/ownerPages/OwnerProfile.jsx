@@ -668,7 +668,7 @@ const OwnerProfile = () => {
             Contact Information
           </h4>
           {["email", "phone"].map((field, index) => (
-            <div className="input-group d-flex justify-content-center align-items-center" style={{ marginBottom: "3vw" }} key={index}>
+            <div className="input-group d-flex justify-content-center align-items-center mb-3" key={index}>
               <input
                 type={field === "email" ? "email" : "text"}
                 name={field}
@@ -688,16 +688,16 @@ const OwnerProfile = () => {
               />
             </div>
           ))}
-          <div style={{ marginBottom: "20vw" }}></div>
+          
     
           {/* Submit Button */}
           <div
-            className="d-flex justify-content-center align-items-center fixed-bottom"
-            style={{ marginBottom: "7vw", height: "12vw" }}
+            className="d-flex justify-content-center align-items-center mt-3 mb-5 "
+            style={{ height: "12vw" }}
           >
             <button
               type="submit"
-              className="d-flex justify-content-center align-items-center text-white"
+              className="d-flex justify-content-center align-items-center text-white fs-5 fw-bold"
               style={{
                 width: "95vw",
                 height: "100%",
