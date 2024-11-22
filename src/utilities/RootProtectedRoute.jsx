@@ -12,50 +12,69 @@ const API_ENDPOINTS = {
 };
 
 const RootProtectedRoute = ({ children }) => {
-	const { getRole } = useCookieAuth(); 
+	const { getRole } = useCookieAuth();
 	const [isAuthenticated, setIsAuthenticated] = useState(null); 
-	const [redirectPath, setRedirectPath] = useState(null);
-
-	const userAuth = async (role) => {
-		try {
-			const endpoint = API_ENDPOINTS[role];
-			if (!endpoint) throw new Error("Invalid role");
-
-			const response = await axios.get(endpoint, { withCredentials: true });
-			return response.data.userType === role;
-		} catch (err) {
-			return false;
-		}
-	};
+	const [redirectPath, setRedirectPath] = useState(null); 
 
 	useEffect(() => {
 		const checkAuth = async () => {
 			const role = getRole(); 
-			if (role) {
-				const authStatus = await userAuth(role); 
-				if (authStatus) {
+			// console.log("Role from getRole():", role);
+
+			if (!role) {
+				// console.log("No role found. Setting isAuthenticated to false.");
+				setIsAuthenticated(false);
+				return;
+			}
+
+			try {
+				const endpoint = API_ENDPOINTS[role];
+				if (!endpoint) {
+					// console.error("Invalid role, no endpoint found.");
+					setIsAuthenticated(false);
+					return;
+				}
+
+				const response = await axios.get(endpoint, { withCredentials: true, headers: { "Cache-Control": "no-store", Pragma: "no-cache" } });
+				// console.log("Backend Response:", response);
+
+				if (response.status === 200 && response.data.userType === role) {
 					setIsAuthenticated(true);
 					setRedirectPath(role === "Customer" ? "/clientHome" : "/ownerProfile");
 				} else {
 					setIsAuthenticated(false); 
 				}
-			} else {
-				setIsAuthenticated(false); 
+			} catch (error) {
+				if (error.response?.status === 401) {
+					// console.error("Unauthorized access (401). Setting isAuthenticated to false.");
+				} else {
+					// console.error("Error during authentication check:", error.message);
+				}
+				setIsAuthenticated(false);
 			}
 		};
 
 		checkAuth();
 	}, []);
 
+	console.log("redirectPath:", redirectPath);
+	console.log("isAuthenticated:", isAuthenticated);
+
 	if (isAuthenticated === null) {
-		return < Loading />; 
+		return <Loading />;
 	}
 
 	if (isAuthenticated && redirectPath) {
+		// console.log("Redirecting to:", redirectPath);
 		return <Navigate to={redirectPath} replace />;
 	}
 
-	return isAuthenticated === false ? children : null;
+	if (!isAuthenticated) {
+		// console.log("User is not authenticated, rendering children.");
+		return children;
+	}
+
+	return null;
 };
 
 export default RootProtectedRoute;

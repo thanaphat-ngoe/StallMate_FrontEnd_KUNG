@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, Navigate, useLocation } from 'react-router-dom';
 import { useClientAuth } from './ClientAuthContext';
+import { useCookieAuth } from "../hooks/useCookieAuth";
 import axios from 'axios';
 import Loading from "../Loading";
 
 const ClientPrivateRoute = () => {
+    const { getRole } = useCookieAuth();
+    const role = getRole(); 
     const BACK_END_BASE_URL = import.meta.env.VITE_API_BACK_END_BASE_URL;
     const [isAuthenticated, setIsAuthenticated] = useState(null);
     const { setAuthData } = useClientAuth();
@@ -13,8 +16,8 @@ const ClientPrivateRoute = () => {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const response = await axios.get(`${BACK_END_BASE_URL}/dashboard/customer`, { withCredentials: true });
-                if (response.status === 200 && response.data.clientID) {
+                const response = await axios.get(`${BACK_END_BASE_URL}/dashboard/customer`, { withCredentials: true, headers: { "Cache-Control": "no-store", Pragma: "no-cache" } });
+                if (response.status === 200 && response.data.clientID && response.data.userType === role) {
                     setIsAuthenticated(true);
                     setAuthData({ clientData: response.data, clientCurrentPath: location.pathname });
                 } else {
@@ -29,7 +32,7 @@ const ClientPrivateRoute = () => {
         checkAuth();
     }, [location.pathname]);
 
-    console.log(isAuthenticated);
+    console.log('isAuthenticated:', isAuthenticated);
     
     if (isAuthenticated === null) {
         return <Loading/>;
