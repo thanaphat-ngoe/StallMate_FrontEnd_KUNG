@@ -14,6 +14,8 @@ import arrow from "../assets/arrow-left.svg"
 import search from "../assets/search.svg"
 import langIcon from '../assets/lang.png'
 import axios from 'axios';
+import info from '../assets/info.svg'
+import StallInfo from '../clientComponents/StallInfo'
 
 const ResNMenu = () => {
 	const navigate = useNavigate();
@@ -26,6 +28,7 @@ const ResNMenu = () => {
 	const [restaurants, setRestaurants] = useState();
 	const [selectedLanguage, setSelectedLanguage] = useState("English");
 	const [selectedCat, setSelectedCat] = useState("All");
+	const [infoVisible, setInfoVisible] = useState(false);
 
 	const location = useLocation();
 
@@ -230,6 +233,20 @@ const ResNMenu = () => {
 								<button className='text-white bg-danger' style={{ marginBottom: "4vw", height: "10vw", fontSize: "3.5vw" }} onClick={() => setSelectedItem(null)} >Cancel</button>
 							</div>
 						</div>
+					) : infoVisible ? (
+						<div>
+							<div
+								className="container-fluid d-flex fixed-top justify-content-between align-items-center text-white"
+								style={{ height: "20vw", background: "#191A1F", zIndex: 1000, padding: "5vw" }}
+							>
+								<img
+									src={arrow}
+									alt=""
+									onClick={() => setInfoVisible(!infoVisible)}
+								/>
+						</div>
+							<StallInfo ownerID={ownerID.ownerID}/>
+						</div>
 					) : (
 						<>
 							<Header pageTitle={""} />
@@ -244,19 +261,23 @@ const ResNMenu = () => {
 											<i className="bi bi-star" style={{ color: 'yellow' }}></i> {selectedRestaurant.rating.average}
 										</p>
 										<Dropdown onSelect={handleSelectLanguage} style={{ marginTop: "2vw" }}>
-											<Dropdown.Toggle id="dropdown-basic" style={{ fontSize: "3.5vw", color: "black", fontWeight: 600, background: "#4CF986" }}>
-												<img
-													src={langIcon}
-													alt="Language Icon"
-													style={{ width: "5vw", height: "5vw", marginRight: "1vw" }}
-												/>
-												{selectedLanguage}
-											</Dropdown.Toggle>
-											<Dropdown.Menu>
-												<Dropdown.Item eventKey="1">English</Dropdown.Item>
-												<Dropdown.Item eventKey="2">Thai</Dropdown.Item>
-											</Dropdown.Menu>
-										</Dropdown>
+												<Dropdown.Toggle id="dropdown-basic" style={{ fontSize: "3.5vw", color: "black", fontWeight: 600, background: "#4CF986" }}>
+													<img
+														src={langIcon}
+														alt="Language Icon"
+														style={{ width: "5vw", height: "5vw", marginRight: "1vw" }}
+													/>
+													{selectedLanguage}
+												</Dropdown.Toggle>
+												<Dropdown.Menu>
+													<Dropdown.Item eventKey="1">English</Dropdown.Item>
+													<Dropdown.Item eventKey="2">Thai</Dropdown.Item>
+												</Dropdown.Menu>
+											</Dropdown>
+											<span className='d-flex align-items-center justify-content-end'>
+												<img src={info} alt="" style={{width:"7.5vw", marginRight:"2vw"}} onClick={() => setInfoVisible(!infoVisible)}/>
+											</span>
+										
 									</div>
 								</div>
 							</div>

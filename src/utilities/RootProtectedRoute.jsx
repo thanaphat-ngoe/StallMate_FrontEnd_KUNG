@@ -66,7 +66,7 @@ const RootProtectedRoute = ({ children }) => {
 
 	if (isAuthenticated && redirectPath) {
 		// console.log("Redirecting to:", redirectPath);
-		return <Navigate to={redirectPath} replace />;
+		return <Navigate to = { redirectPath } replace />;
 	}
 
 	if (!isAuthenticated) {

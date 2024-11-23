@@ -23,8 +23,8 @@ const OwnerPrivateRoute = () => {
                 } else {
                     setIsAuthenticated(false);
                 }
-                console.log(response.status);
-                console.log(response.data);
+                // console.log(response.status);
+                // console.log(response.data);
             } catch (error) {
                 setIsAuthenticated(false);
             }
@@ -32,7 +32,7 @@ const OwnerPrivateRoute = () => {
         checkAuth();
     }, [location.pathname]);
 
-    console.log('isAuthenticated:', isAuthenticated);
+    // console.log('isAuthenticated:', isAuthenticated);
     
     if (isAuthenticated === null) {
         return <Loading/>;
