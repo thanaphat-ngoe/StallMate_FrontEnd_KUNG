@@ -19,7 +19,7 @@ import locationLogo from '../assets/location.svg';
 import { useOwnerAuth } from '../utilities/OwnerAuthContext';
 import axios from 'axios';
 
-const StallMenu = () => {
+const OwnerStallMenu = () => {
 	const BACK_END_BASE_URL = import.meta.env.VITE_API_BACK_END_BASE_URL;
 	const { authData } = useOwnerAuth();
 	const [selectedRestaurant, setSelectedRestaurant] = useState(null);
@@ -1040,4 +1040,4 @@ const StallMenu = () => {
 };
 
 
-export default StallMenu;
+export default OwnerStallMenu;
