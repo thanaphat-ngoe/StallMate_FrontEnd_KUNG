@@ -93,7 +93,7 @@ const OwnerProfile = () => {
 		console.log("wallet");
 	};
 
-	const [profilePresence, setProfilePresence] = useState(false);
+	const [profilePresence, setProfilePresence] = useState(true);
 
 	const [profile, setProfile] = useState({
 		StallOwnerID: "67286dca2df6852ad96840b5",
