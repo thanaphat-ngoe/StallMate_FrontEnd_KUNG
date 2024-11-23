@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import OrderQueueCard from "../ownerComponents/OrderQueueCard";
 import { useState } from "react";
-import OrderDetail from "../ownerComponents/OrderDetail"
+import OrderDetail from "../ownerComponents/OrderDetail";
 const OrderQueue = () => {
   const navigate = useNavigate();
 
@@ -21,16 +21,15 @@ const OrderQueue = () => {
     </svg>
   );
 
-
   const ordersList = [
     {
       orderId: "641a4a6d3b9a6e1d5c8f7e29",
       customerId: "c12345",
       items: [
         { name: "Pad Thai", quantity: 2, price: 80 },
-        { name: "Som Tum (Papaya Salad)", quantity: 1, price: 60 }, 
+        { name: "Som Tum (Papaya Salad)", quantity: 1, price: 60 },
       ],
-      totalAmount: 220, 
+      totalAmount: 220,
       tableNumber: 12,
       createdAt: "2024-11-22T15:30:00Z",
     },
@@ -38,10 +37,10 @@ const OrderQueue = () => {
       orderId: "641a4a6d3b9a6e1d5c8f7e30",
       customerId: "c67890",
       items: [
-        { name: "Tom Yum Goong (Spicy Shrimp Soup)", quantity: 1, price: 150 }, 
-        { name: "Khao Pad (Fried Rice)", quantity: 2, price: 100 }, 
+        { name: "Tom Yum Goong (Spicy Shrimp Soup)", quantity: 1, price: 150 },
+        { name: "Khao Pad (Fried Rice)", quantity: 2, price: 100 },
       ],
-      totalAmount: 350, 
+      totalAmount: 350,
       tableNumber: 5,
       createdAt: "2024-11-22T16:00:00Z",
     },
@@ -49,10 +48,10 @@ const OrderQueue = () => {
       orderId: "641a4a6d3b9a6e1d5c8f7e31",
       customerId: "c54321",
       items: [
-        { name: "Khao Soi (Northern Curry Noodles)", quantity: 3, price: 210 }, 
-        { name: "Moo Ping (Grilled Pork Skewers)", quantity: 3, price: 90 }, 
+        { name: "Khao Soi (Northern Curry Noodles)", quantity: 3, price: 210 },
+        { name: "Moo Ping (Grilled Pork Skewers)", quantity: 3, price: 90 },
       ],
-      totalAmount: 300, 
+      totalAmount: 300,
       tableNumber: 7,
       createdAt: "2024-11-22T16:30:00Z",
     },
@@ -60,10 +59,10 @@ const OrderQueue = () => {
       orderId: "641a4a6d3b9a6e1d5c8f7e32",
       customerId: "c09876",
       items: [
-        { name: "Massaman Curry", quantity: 1, price: 120 }, 
-        { name: "Sticky Rice", quantity: 1, price: 20 }, 
+        { name: "Massaman Curry", quantity: 1, price: 120 },
+        { name: "Sticky Rice", quantity: 1, price: 20 },
       ],
-      totalAmount: 140, 
+      totalAmount: 140,
       tableNumber: 3,
       createdAt: "2024-11-22T17:00:00Z",
     },
@@ -79,7 +78,6 @@ const OrderQueue = () => {
       createdAt: "2024-11-22T18:00:00Z",
     },
   ];
-  
 
   const handleBackBtn = () => {
     navigate("/ownerProfile");
@@ -90,17 +88,20 @@ const OrderQueue = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const handleCardClick = (order) => {
     console.log("Toggle");
+    setSelectedOrder(order);
     setDetail(!detail); // Show detail view
-    setSelectedOrder(order)
   };
   return (
-    
-    
     <>
       {detail ? (
-        <OrderDetail detail={detail} setDetail={setDetail} order={selectedOrder}/>
+        <OrderDetail
+          detail={detail}
+          setDetail={setDetail}
+          order={selectedOrder}
+        />
       ) : (
-        <div className="container-fluid  d-flex flex-column p-0">
+        <div className="container-fluid d-flex flex-column p-0">
+          {/* Header Section */}
           <div
             className="container-fluid"
             style={{
@@ -109,14 +110,14 @@ const OrderQueue = () => {
           >
             <div className="row d-flex ">
               <i
-                className="text-white col-2 align-self-start my-3 ms-2 px-0 "
+                className="text-white col-2 align-self-start my-3 ms-2 px-0"
                 onClick={handleBackBtn}
               >
                 {LEFT_ARROW}
               </i>
               <div className="text-white col-8 align-self-end mt-4 mx-0 ms-2">
                 <div
-                  className="d-flex justify-content-start "
+                  className="d-flex justify-content-start"
                   style={{ fontSize: "2em", padding: "0px" }}
                 >
                   Order Queue
@@ -124,24 +125,36 @@ const OrderQueue = () => {
               </div>
             </div>
           </div>
+
+          {/* Pending Queue Section */}
           <div
             className="row mt-2 d-flex justify-content-center"
             style={{ width: "80%", margin: "0 auto" }}
           >
-            <h4 className="text-white">Pending</h4>
+            <h4 className="text-white">
+              {ordersList && ordersList.length > 0
+                ? "Pending"
+                : "No Pending Queue"}
+            </h4>
             <hr className="text-white" style={{ border: "2px solid white" }} />
           </div>
-          {/* {if order still in pending on db} */}
-          <div>
-            {
-              ordersList.map((order) => (
-                <OrderQueueCard 
-                key={order.orderId}
-                clickShowDetail={() => handleCardClick(order)}
-                order={order} />
-              ))
-            }
-          </div>
+
+          {/* No Pending Queue or Order Cards */}
+          {ordersList && ordersList.length > 0 ? (
+            // Render order cards if there are orders
+            <div>
+              {ordersList.map((order) => (
+                <OrderQueueCard
+                  key={order.orderId}
+                  clickShowDetail={() => handleCardClick(order)}
+                  order={order}
+                />
+              ))}
+            </div>
+          ) : (
+            // Render No Pending Queue message if no orders
+            <div className="text-center mt-4"></div>
+          )}
         </div>
       )}
     </>
