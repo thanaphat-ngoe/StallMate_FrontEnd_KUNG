@@ -281,7 +281,7 @@ const OwnerProfile = () => {
 				<div className="container-fluid mt-5 ">
 					<div className="row d-flex justify-content-around">
 						<div
-							onClick={handleWallet}
+							onClick={handleMenuEdit}
 							className="col d-flex mx-1 flex-column justify-content-center border-0 align-items-center"
 							style={{
 								height: "120px",
@@ -294,7 +294,7 @@ const OwnerProfile = () => {
 						</div>
 
 						<div
-							onClick={handleWallet}
+							onClick={handleQueue}
 							className="col d-flex mx-1 flex-column justify-content-center border-0 align-items-center"
 							style={{
 								height: "120px",
