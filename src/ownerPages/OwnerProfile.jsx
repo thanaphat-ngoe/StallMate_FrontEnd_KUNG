@@ -81,6 +81,7 @@ const OwnerProfile = () => {
   const { authData } = useOwnerAuth();
   const [selectedDay, setSelectedDay] = useState("Monday");
   const navigate = useNavigate();
+console.log(authData);
 
   const handleChangeName = () => {
     navigate("/ownerEditProfile");
@@ -255,7 +256,7 @@ const OwnerProfile = () => {
 								className="container d-flex justify-content-center align-items-center border rounded-pill mb-2"
 								style={{ height: "45px" }}
 							>
-								<p className="mb-0 me-3">David Beckham</p>
+								<p className="mb-0 me-3">{authData.ownerData.ownerName}</p>
 								{/* {isLoading ? "Loading..." : userName} */}
 								<i onClick={handleChangeName}>{PEN_ICON}</i>
 							</div>
@@ -289,7 +290,7 @@ const OwnerProfile = () => {
 								borderRadius: "15px",
 							}}
 						>
-							<i>{STALL_ICON}</i>
+							<i className="mt-3">{STALL_ICON}</i>
 							<p className="text-white fw-bold mt-2">Your Stall</p>
 						</div>
 
@@ -302,8 +303,8 @@ const OwnerProfile = () => {
 								borderRadius: "15px",
 							}}
 						>
-							<i>{QUEUE_ICON}</i>
-							<p className="text-white fw-bold">Queue</p>
+							<i className="mt-3">{QUEUE_ICON}</i>
+							<p className="text-white fw-bold ">Queue</p>
 						</div>
 						<div
 							onClick={handleWallet}
@@ -314,8 +315,8 @@ const OwnerProfile = () => {
 								borderRadius: "15px",
 							}}
 						>
-							<i>{HISTORY_ICON}</i>
-							<p className="text-white fw-bold">History</p>
+							<i className="mt-3">{HISTORY_ICON}</i>
+							<p className="text-white fw-bold ">History</p>
 						</div>
 					</div>
 				</div>
