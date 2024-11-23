@@ -105,7 +105,6 @@ const OwnerProfile = () => {
   const handleMenuEdit = () => {
     navigate("/StallMenu");
   };
-
   const handleWallet = () => {
     console.log("wallet");
   };

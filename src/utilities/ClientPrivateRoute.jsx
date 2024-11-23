@@ -23,8 +23,8 @@ const ClientPrivateRoute = () => {
                 } else {
                     setIsAuthenticated(false);
                 }
-                console.log(response.status);
-                console.log(response.data);
+                // console.log(response.status);
+                // console.log(response.data);
             } catch (error) {
                 setIsAuthenticated(false);
             }
@@ -32,13 +32,13 @@ const ClientPrivateRoute = () => {
         checkAuth();
     }, [location.pathname]);
 
-    console.log('isAuthenticated:', isAuthenticated);
+    // console.log('isAuthenticated:', isAuthenticated);
     
     if (isAuthenticated === null) {
         return <Loading/>;
     }
 
-    return isAuthenticated ? (<Outlet/>) : (<Navigate to="/" replace state={{ from: location }}/>);
+    return isAuthenticated ? (<Outlet/>) : (<Navigate to="/" replace state = {{ from: location }}/>);
 };
 
 export default ClientPrivateRoute;
