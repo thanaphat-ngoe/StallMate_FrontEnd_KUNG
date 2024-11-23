@@ -93,6 +93,11 @@ const OwnerProfile = () => {
 		console.log("wallet");
 	};
 
+	const handleMenu = () => {
+		console.log("Show Menu");
+		navigate("/ownerMenu");
+	};
+
 	const [profilePresence, setProfilePresence] = useState(true);
 
 	const [profile, setProfile] = useState({
@@ -257,7 +262,7 @@ const OwnerProfile = () => {
 								className="container d-flex justify-content-center align-items-center border rounded-pill mb-2"
 								style={{ height: "45px" }}
 							>
-								<p className="mb-0 me-3">David Beckham</p>
+								<p className="mb-0 me-3">{authData?.ownerData.ownerName}</p>
 								{/* {isLoading ? "Loading..." : userName} */}
 								<i onClick={handleChangeName}>{PEN_ICON}</i>
 							</div>
@@ -283,7 +288,7 @@ const OwnerProfile = () => {
 				<div className="container-fluid mt-5 ">
 					<div className="row d-flex justify-content-around">
 						<div
-							onClick={handleWallet}
+							onClick={handleMenu}
 							className="col d-flex mx-1 flex-column justify-content-center border-0 align-items-center"
 							style={{
 								height: "120px",

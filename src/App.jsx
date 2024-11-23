@@ -34,8 +34,6 @@ import { OwnerAuthProvider } from './utilities/OwnerAuthContext';
 {/* Hooks components */}
 import { useCookieAuth } from "./hooks/useCookieAuth";
 
-import ClientTest from './clientPages/ClientTest';
-
 function App() {
 	const { setRole } = useCookieAuth();
 
@@ -58,7 +56,6 @@ function App() {
         		<Route path="/clientLogin" element={ <ClientLogin/> }/>
 				<Route path="/ownerLogin" element={ <OwnerLogin/> }/>
 				
-				<Route path="/ClientTest" element={ <ClientTest/> }/>
 
 				{/* Client private route */}
 				<Route element={ <ClientAuthProvider> <ClientPrivateRoute/> </ClientAuthProvider> }>
@@ -72,8 +69,9 @@ function App() {
 				
 				{/* Owner private route */}
 				<Route element={ <OwnerAuthProvider> <OwnerPrivateRoute/> </OwnerAuthProvider> }>
-					<Route path="/ownerProfile" element={  <OwnerProfile/> }/>
-					<Route path="/ownerEditProfile" element={  <OwnerEditProfile/> }/>
+					<Route path="/ownerProfile" element={ <OwnerProfile/> }/>
+					<Route path="/ownerEditProfile" element={ <OwnerEditProfile/> }/>
+					<Route path="/ownerMenu" element={ <StallMenu/> }/>
         		</Route>
 
 
