@@ -2,18 +2,7 @@ import { useNavigate } from "react-router-dom";
 import style from "./OwnerProfile.module.css";
 import { useOwnerAuth } from "../utilities/OwnerAuthContext";
 import { useState } from "react";
-import arrow from "../assets/arrow-left.svg";
-import menuName from "../assets/menuName.png";
-import dollar from "../assets/dollar.png";
-import cloud from "../assets/Cloud.png";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import search from "../assets/search.svg";
-import stallqr from "../assets/stallqr.png";
-import catego from "../assets/catego.svg";
-import shop from "../assets/shop.svg";
-import locationLogo from "../assets/location.svg";
-import calendar from "../assets/CalendarShop.svg";
-import editLogo from "../assets/edit.svg";
 import "bootstrap/dist/css/bootstrap.min.css";
 import picplaceholder from "../assets/picplace.svg";
 
@@ -116,6 +105,7 @@ const OwnerProfile = () => {
   const handleMenuEdit = () => {
     navigate("/StallMenu");
   };
+
   const handleWallet = () => {
     console.log("wallet");
   };
@@ -123,7 +113,7 @@ const OwnerProfile = () => {
   const handleQueue = () => {
     navigate("/ownerOrderQueue");
   };
-  const [profilePresence, setProfilePresence] = useState(false);
+  const [profilePresence, setProfilePresence] = useState(true);
 
   const [profile, setProfile] = useState({
     StallOwnerID: "67286dca2df6852ad96840b5",
@@ -305,7 +295,7 @@ const OwnerProfile = () => {
       <div className="container-fluid mt-5 ">
         <div className="row d-flex justify-content-around">
           <div
-            onClick={handleWallet}
+            onClick={handleMenuEdit}
             className="col d-flex mx-1 flex-column justify-content-center border-0 align-items-center"
             style={{
               height: "120px",
