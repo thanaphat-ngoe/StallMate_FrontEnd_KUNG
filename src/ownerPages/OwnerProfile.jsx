@@ -81,6 +81,9 @@ const OwnerProfile = () => {
   const { authData } = useOwnerAuth();
   const [selectedDay, setSelectedDay] = useState("Monday");
   const navigate = useNavigate();
+  const handleQueue = () => {
+    navigate('/ownerOrderQueue') 
+  }
 
   const handleChangeName = () => {
     navigate("/ownerEditProfile");
@@ -88,6 +91,9 @@ const OwnerProfile = () => {
 
 	const handleMenuEdit = () => {
 		navigate("/StallMenu");
+	};
+	const handleOrderQueue = () => {
+		navigate("/ownerOrderQueue");
 	};
 	const handleWallet = () => {
 		console.log("wallet");
@@ -296,7 +302,7 @@ const OwnerProfile = () => {
 						</div>
 
 						<div
-							onClick={handleWallet}
+							onClick={handleOrderQueue}
 							className="col d-flex mx-1 flex-column justify-content-center border-0 align-items-center"
 							style={{
 								height: "120px",

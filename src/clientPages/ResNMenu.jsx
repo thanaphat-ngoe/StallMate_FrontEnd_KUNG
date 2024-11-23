@@ -17,6 +17,8 @@ import axios from 'axios';
 import info from '../assets/info.svg'
 import StallInfo from '../clientComponents/StallInfo'
 
+
+
 const ResNMenu = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
@@ -29,6 +31,7 @@ const ResNMenu = () => {
 	const [selectedLanguage, setSelectedLanguage] = useState("English");
 	const [selectedCat, setSelectedCat] = useState("All");
 	const [infoVisible, setInfoVisible] = useState(false);
+	const [isFav, setIsFav] = useState(false);
 
 	const location = useLocation();
 
@@ -119,6 +122,10 @@ const ResNMenu = () => {
 			setSelectedCat(categoryList[parseInt(eventKey) - 1]);
 		}
 	};
+
+	const handleFav = () => {
+		setIsFav(!isFav);
+	}
 
 
 	return (
@@ -259,6 +266,7 @@ const ResNMenu = () => {
 										<h1 className="mb-4" style={{ fontSize: '7vw' }}>{selectedRestaurant.restaurant_name}</h1>
 										<p className="card-text text-white" style={{ fontSize: "4vw" }}>
 											<i className="bi bi-star" style={{ color: 'yellow' }}></i> {selectedRestaurant.rating.average}
+											
 										</p>
 										<Dropdown onSelect={handleSelectLanguage} style={{ marginTop: "2vw" }}>
 												<Dropdown.Toggle id="dropdown-basic" style={{ fontSize: "3.5vw", color: "black", fontWeight: 600, background: "#4CF986" }}>
@@ -274,9 +282,37 @@ const ResNMenu = () => {
 													<Dropdown.Item eventKey="2">Thai</Dropdown.Item>
 												</Dropdown.Menu>
 											</Dropdown>
-											<span className='d-flex align-items-center justify-content-end'>
-												<img src={info} alt="" style={{width:"7.5vw", marginRight:"2vw"}} onClick={() => setInfoVisible(!infoVisible)}/>
-											</span>
+											<div className='col-12 d-flex align-items-center justify-content-between' style={{marginTop:"2vw"}}>
+											<span 
+												className="d-flex align-items-center justify-content-start" 
+												onClick={handleFav}
+												>
+												<svg
+													fill={isFav ? "#B01E28" : "#FFFFFF"}
+													height="6vw"
+													width="6vw"
+													id="Layer_1"
+													xmlns="http://www.w3.org/2000/svg"
+													xmlnsXlink="http://www.w3.org/1999/xlink"
+													viewBox="0 0 455 455"
+													xmlSpace="preserve"
+													stroke="#FFFFFF"
+												>
+													<g id="SVGRepo_bgCarrier" strokeWidth={0} />
+													<g
+													id="SVGRepo_tracerCarrier"
+													strokeLinecap="round"
+													strokeLinejoin="round"
+													/>
+													<g id="SVGRepo_iconCarrier">
+													<path d="M326.632,10.346c-38.733,0-74.991,17.537-99.132,46.92c-24.141-29.383-60.399-46.92-99.132-46.92 C57.586,10.346,0,67.931,0,138.714c0,55.426,33.049,119.535,98.23,190.546c50.162,54.649,104.729,96.96,120.257,108.626l9.01,6.769 l9.009-6.768c15.53-11.667,70.099-53.979,120.26-108.625C421.95,258.251,455,194.141,455,138.714 C455,67.931,397.414,10.346,326.632,10.346z" />
+													</g>
+												</svg>
+												</span>
+												<span className='d-flex align-items-center justify-content-end'>
+													<img src={info} alt="" style={{width:"7.5vw", marginRight:"2vw"}} onClick={() => setInfoVisible(!infoVisible)}/>
+												</span>
+											</div>
 										
 									</div>
 								</div>

@@ -32,7 +32,7 @@ const StallMenu = () => {
   const [isQrVisible, setIsQrVisible] = useState(false);
   const [addMenu, setAddMenu] = useState(false);
   const [selectedAddMenu, setSelectedAddMenu] = useState({
-    image: null,
+    imageUrl: null,
     name: "",
     description: "",
     price: 0,
@@ -42,8 +42,8 @@ const StallMenu = () => {
   const [query, setQuery] = useState("");
   const [editRes, setEditRes] = useState(null);
   const [selectedDay, setSelectedDay] = useState("Monday");
-  
-    
+
+
     
   useEffect(() => {
     const data = [
