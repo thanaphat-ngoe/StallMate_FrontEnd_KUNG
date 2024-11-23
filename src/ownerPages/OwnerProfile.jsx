@@ -86,49 +86,47 @@ const OwnerProfile = () => {
     navigate("/ownerEditProfile");
   };
 
-	const handleMenuEdit = () => {
-		navigate("/StallMenu");
-	};
-	const handleWallet = () => {
-		console.log("wallet");
-	};
+  const handleMenuEdit = () => {
+    navigate("/StallMenu");
+  };
+  const handleWallet = () => {
+    console.log("wallet");
+  };
 
-	const [profilePresence, setProfilePresence] = useState(true);
+  const handleQueue = () => {
+    navigate("/ownerOrderQueue");
+  };
+  const [profilePresence, setProfilePresence] = useState(true);
 
-	const [profile, setProfile] = useState({
-		StallOwnerID: "67286dca2df6852ad96840b5",
-		owner_profile: {
-			full_name: "",
-			profile_photo: "",
-		},
-		restaurant: {
-			name: "",
-			photo: "",
-		},
-		location: {
-			address: "",
-			city: "",
-			state: "",
-		},
-		opening_hours: [
-			{ weekday: "Monday", open_time: "", close_time: "" },
-			{ weekday: "Tuesday", open_time: "", close_time: "" },
-			{ weekday: "Wednesday", open_time: "", close_time: "" },
-			{ weekday: "Thursday", open_time: "", close_time: "" },
-			{ weekday: "Friday", open_time: "", close_time: "" },
-			{ weekday: "Saturday", open_time: "", close_time: "" },
-			{ weekday: "Sunday", open_time: "", close_time: "" },
-		],
-		contact: {
-			email: "",
-			phone: "",
-		},
-	});
-
-
-
-
-
+  const [profile, setProfile] = useState({
+    StallOwnerID: "67286dca2df6852ad96840b5",
+    owner_profile: {
+      full_name: "",
+      profile_photo: "",
+    },
+    restaurant: {
+      name: "",
+      photo: "",
+    },
+    location: {
+      address: "",
+      city: "",
+      state: "",
+    },
+    opening_hours: [
+      { weekday: "Monday", open_time: "", close_time: "" },
+      { weekday: "Tuesday", open_time: "", close_time: "" },
+      { weekday: "Wednesday", open_time: "", close_time: "" },
+      { weekday: "Thursday", open_time: "", close_time: "" },
+      { weekday: "Friday", open_time: "", close_time: "" },
+      { weekday: "Saturday", open_time: "", close_time: "" },
+      { weekday: "Sunday", open_time: "", close_time: "" },
+    ],
+    contact: {
+      email: "",
+      phone: "",
+    },
+  });
 
 	const handleNestedInputChange = (event, section) => {
 		const { name, value } = event.target;
@@ -283,7 +281,7 @@ const OwnerProfile = () => {
 				<div className="container-fluid mt-5 ">
 					<div className="row d-flex justify-content-around">
 						<div
-							onClick={handleWallet}
+							onClick={handleMenuEdit}
 							className="col d-flex mx-1 flex-column justify-content-center border-0 align-items-center"
 							style={{
 								height: "120px",
@@ -296,7 +294,7 @@ const OwnerProfile = () => {
 						</div>
 
 						<div
-							onClick={handleWallet}
+							onClick={handleQueue}
 							className="col d-flex mx-1 flex-column justify-content-center border-0 align-items-center"
 							style={{
 								height: "120px",

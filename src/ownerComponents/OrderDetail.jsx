@@ -37,7 +37,7 @@ const OrderDetail = ({ detail, setDetail, order }) => {
       </div>
       <div className="row d-flex h2 ms-5 mt-0">Order Detail</div>
       <div className="row h3 fw-bold d-flex justify-content-end me-3">
-        Table: {}
+        Table: {order.tableNumber}
       </div>
       <div className="row d-flex">
         <img className="col-4" src="src/assets/siam.png" alt="" />
@@ -45,15 +45,18 @@ const OrderDetail = ({ detail, setDetail, order }) => {
       </div>
       <div className="row d-flex"></div>
       <h6 className="col-3 d-felx ms-4">Menu</h6>
-      <OrderDetailCard />
+      {order.items.map((item, index) => (
+        <OrderDetailCard key={index} item={item}/>
+      ))}
+      
       <hr
         className="text-white mt-2"
         style={{ border: "2px solid white", width: "90vw", margin: "0 auto" }}
       />
       <div className="row d-flex ms-3 mt-2">
         <h6 className="col-3">Total</h6>
-        <div className="col-6"></div>
-        <h6 className="col-3"> {}</h6>
+        <div className="col-6">{}</div>
+        <h6 className="col-3"> {order.totalAmount} ฿</h6>
       </div>
       <div className="row d-flex ms-3 mt-2">
         <h6 className="col-6">Payment Medthod</h6>

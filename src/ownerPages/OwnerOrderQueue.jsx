@@ -27,10 +27,10 @@ const OrderQueue = () => {
       orderId: "641a4a6d3b9a6e1d5c8f7e29",
       customerId: "c12345",
       items: [
-        { name: "Margherita Pizza", quantity: 2, price: 10.99 },
-        { name: "Caesar Salad", quantity: 1, price: 7.49 },
+        { name: "Pad Thai", quantity: 2, price: 80 },
+        { name: "Som Tum (Papaya Salad)", quantity: 1, price: 60 }, 
       ],
-      totalAmount: 29.47,
+      totalAmount: 220, 
       tableNumber: 12,
       createdAt: "2024-11-22T15:30:00Z",
     },
@@ -38,24 +38,48 @@ const OrderQueue = () => {
       orderId: "641a4a6d3b9a6e1d5c8f7e30",
       customerId: "c67890",
       items: [
-        { name: "Spaghetti Carbonara", quantity: 1, price: 14.99 },
-        { name: "Garlic Bread", quantity: 2, price: 3.49 },
+        { name: "Tom Yum Goong (Spicy Shrimp Soup)", quantity: 1, price: 150 }, 
+        { name: "Khao Pad (Fried Rice)", quantity: 2, price: 100 }, 
       ],
-      totalAmount: 21.97,
+      totalAmount: 350, 
       tableNumber: 5,
       createdAt: "2024-11-22T16:00:00Z",
     },
     {
-      orderId: "641a4a6d3b9a6e1d5c8f7e30",
-      customerId: "c67890",
+      orderId: "641a4a6d3b9a6e1d5c8f7e31",
+      customerId: "c54321",
       items: [
-        { name: "Spaghetti Carbonara", quantity: 1, price: 14.99 },
-        { name: "Garlic Bread", quantity: 2, price: 3.49 },
+        { name: "Khao Soi (Northern Curry Noodles)", quantity: 3, price: 210 }, 
+        { name: "Moo Ping (Grilled Pork Skewers)", quantity: 3, price: 90 }, 
       ],
-      totalAmount: 21.97,
-      tableNumber: 5,
-      createdAt: "2024-11-22T16:00:00Z",
-    }]
+      totalAmount: 300, 
+      tableNumber: 7,
+      createdAt: "2024-11-22T16:30:00Z",
+    },
+    {
+      orderId: "641a4a6d3b9a6e1d5c8f7e32",
+      customerId: "c09876",
+      items: [
+        { name: "Massaman Curry", quantity: 1, price: 120 }, 
+        { name: "Sticky Rice", quantity: 1, price: 20 }, 
+      ],
+      totalAmount: 140, 
+      tableNumber: 3,
+      createdAt: "2024-11-22T17:00:00Z",
+    },
+    {
+      orderId: "641a4a6d3b9a6e1d5c8f7e33",
+      customerId: "c11223",
+      items: [
+        { name: "Pad Kra Pao (Basil Stir Fry)", quantity: 2, price: 160 }, // 80 THB each
+        { name: "Thai Iced Tea", quantity: 2, price: 80 }, // 40 THB each
+      ],
+      totalAmount: 240, // 160 + 80
+      tableNumber: 15,
+      createdAt: "2024-11-22T18:00:00Z",
+    },
+  ];
+  
 
   const handleBackBtn = () => {
     navigate("/ownerProfile");
@@ -64,19 +88,15 @@ const OrderQueue = () => {
   const [detail, setDetail] = useState(false);
 
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const handleCardClick = () => {
+  const handleCardClick = (order) => {
     console.log("Toggle");
     setDetail(!detail); // Show detail view
     setSelectedOrder(order)
   };
-
-  
-
   return (
+    
+    
     <>
-
-
-
       {detail ? (
         <OrderDetail detail={detail} setDetail={setDetail} order={selectedOrder}/>
       ) : (
@@ -117,7 +137,7 @@ const OrderQueue = () => {
               ordersList.map((order) => (
                 <OrderQueueCard 
                 key={order.orderId}
-                clickShowDetail={handleCardClick}
+                clickShowDetail={() => handleCardClick(order)}
                 order={order} />
               ))
             }
