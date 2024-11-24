@@ -2,40 +2,73 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const FavoriteIcon = ({ customerID, stallownerID }) => {
-    const [isFav, setIsFav] = useState(false); 
+    const [isFav, setIsFav] = useState(false);
     const [FavData, setFavData] = useState('');
 
     useEffect(() => {
         const fetchFavoriteStatus = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/${customerID}/favorite/${stallownerID}`);
-                setIsFav(response.data.isFavorite); 
+                const response = await axios.get(
+                    `http://localhost:3000/dashboard/customer/${customerID}/favorite`,
+                    { withCredentials: true }
+                );
+                console.log("Response Data:", response.data.favorites);
+                console.log("Stall Owner ID:", stallownerID);
+
+                const extractedStallOwnerID = typeof stallownerID === 'object' ? stallownerID.ownerID : stallownerID;
+
+                const favoriteStalls = response.data.favorites.filter(
+                    stall => stall.id === extractedStallOwnerID
+                );
+    
+                console.log("Filtered Favorites:", favoriteStalls);
+
+                setFavData(favoriteStalls);
+                if (favoriteStalls.length > 0) {
+                    setIsFav(true);
+                }
             } catch (error) {
                 console.error("Error fetching favorite status:", error);
             }
         };
-
+    
         fetchFavoriteStatus();
     }, [customerID, stallownerID]);
+    
 
     const handleFav = async () => {
         try {
+
+            const ownerID = stallownerID?.ownerID;
+    
+            if (!ownerID) {
+                throw new Error("Invalid Stall Owner ID");
+            }
+    
+            console.log("Customer ID:", customerID); 
+            console.log("Stall Owner ID:", ownerID); 
+    
             if (isFav) {
-                
-                await axios.put(`http://localhost:3000/${customerID}/favorite/${stallownerID}`);
+                await axios.delete(
+                    `http://localhost:3000/dashboard/customer/${customerID}/favorite/${ownerID}`,
+                    { withCredentials: true }
+                );
                 setIsFav(false);
-                alert("Stall removed from favorites successfully!");
             } else {
-                
-                await axios.delete(`http://localhost:3000//${customerID}/favorite/${stallownerID}`);
+                await axios.put(
+                    `http://localhost:3000/dashboard/customer/${customerID}/favorite/${ownerID}`,
+                    null,
+                    { withCredentials: true }
+                );
                 setIsFav(true);
-                alert("Stall added to favorites successfully!");
             }
         } catch (error) {
-            console.error("Error toggling favorite:", error);
+            console.error("Error toggling favorite:", error.response?.data || error.message);
             alert(error.response?.data?.error || "Failed to update favorites. Please try again.");
         }
     };
+    
+    
 
     return (
         <span
