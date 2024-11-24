@@ -1,17 +1,39 @@
 import { useNavigate } from "react-router-dom";
 import style from "./OwnerEditProfile.module.css";
 import { useOwnerAuth } from "../utilities/OwnerAuthContext";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 const OwnerEditProfile = () => {
   const { authData } = useOwnerAuth();
   const navigate = useNavigate();
+
+  // authData.ownerProfile.full_name
+  // authData.ownerProfile.profilePhoto
+  // authData.ownerProfile.bio
+  // authData.ownerProfile.experience_years
 
   const [isEditing, setIsEditing] = useState(false);
 
   const [localOwnerName, setLocalOwnerName] = useState(
     authData?.ownerData.ownerName || ""
   );
+
+  //authDate.ownerProfile.profilePhoto
+  const [localProfilePhoto, setLocalProfilePhoto] = useState(
+    "src/assets/userPicture.png"
+  );
+
+  const [isEditingExpYear, setIsEditingExpYear] = useState(false);
+  const [experienceYears, setExperienceYears] = useState(2);
+
+  const [isEditingBio, setIsEditingBio] = useState(false);
+  const [bioState, setBioState] = useState();
+
+  const handleBioChange = (e) => {
+    setBioState(e.target.value); // Update the bio state
+  };
+
+  const fileInputRef = useRef(null);
 
   const handleBackBtn = () => {
     console.log("profile");
@@ -28,9 +50,41 @@ const OwnerEditProfile = () => {
     }
   };
 
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setLocalProfilePhoto(e.target.result); // Update the local profile photo preview
+        console.log(e.target.result);
+        console.log("New profile photo uploaded");
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleCameraClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleExperienceYearChange = (e) => {
+    const value = e.target.value;
+    if (!isNaN(value) && value >= 0) {
+      setExperienceYears(value);
+    }
+  };
+
   const handleFromSubmit = (e) => {
     e.preventDefault();
-    console.log(localOwnerName);
+    const full_name = localOwnerName
+    const profilePhoto = localProfilePhoto
+    const experience_years = experienceYears
+    const bio = bioState
+    console.log(full_name);
+    console.log(profilePhoto);
+    console.log(experience_years);
+    console.log(bio);
+    
   };
 
   const LEFT_ARROW = (
@@ -99,11 +153,23 @@ const OwnerEditProfile = () => {
           <div className="position-relative">
             <img
               className="img-fluid"
-              src="src/assets/userPicture.png"
+              src={localProfilePhoto}
               alt="userPicture"
               style={{ width: "170px" }}
             />
-            <i className="position-absolute bottom-0 end-0">{CAMERA}</i>
+            <i
+              className="position-absolute bottom-0 end-0"
+              onClick={handleCameraClick}
+            >
+              {CAMERA}
+            </i>
+            <input
+              type="file"
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              accept="image/*"
+              onChange={handleFileChange}
+            />
           </div>
         </div>
       </div>
@@ -179,14 +245,34 @@ const OwnerEditProfile = () => {
           <div className="row text-white my-2 w-75">
             <div
               className={`col-12 d-flex align-items-center p-2 ${style.cardBorder}`}
+              onClick={() => setIsEditingBio(true)}
             >
               <img
                 className="me-3"
-                src="src/assets/sexIcon.png"
+                src="src/assets/bio.png"
                 alt="sex-icon"
                 style={{ width: "40px" }}
               />
-              <span>Male</span>
+              {isEditingBio ? (
+                <textarea
+                  value={bioState}
+                  onChange={handleBioChange}
+                  onBlur={() => setIsEditingBio(false)} // Exit edit mode on blur
+                  autoFocus
+                  style={{
+                    background: "transparent",
+                    border: "none",
+                    color: "white",
+                    outline: "none",
+                    resize: "none", // Prevent resizing
+                    width: "100%", // Adjust width as needed
+                    minHeight: "50px", // Adjust height as needed
+                  }}
+                  placeholder="Write something about yourself..."
+                />
+              ) : (
+                <span>{bioState || "Write something about yourself..."}</span>
+              )}
             </div>
           </div>
 
@@ -257,6 +343,7 @@ const OwnerEditProfile = () => {
           <div className="row text-white my-2 w-75">
             <div
               className={`col-12 d-flex align-items-center p-2 ${style.cardBorder}`}
+              onClick={() => setIsEditingExpYear(true)}
             >
               <img
                 className="me-3"
@@ -264,7 +351,29 @@ const OwnerEditProfile = () => {
                 alt="map-icon"
                 style={{ width: "40px" }}
               />
-              <span>Experiences Year</span>
+              {isEditingExpYear ? (
+                <span>
+                  Experiences Years:
+                  <input
+                    type="number"
+                    value={experienceYears}
+                    onChange={handleExperienceYearChange}
+                    onBlur={() => setIsEditingExpYear(false)}
+                    autoFocus
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      color: "white",
+                      outline: "none",
+                      width: "100px",
+                    }}
+                  />
+                </span>
+              ) : (
+                <span>
+                  Experiences Year : {experienceYears || "Experiences Year"}
+                </span>
+              )}
             </div>
           </div>
         </div>
