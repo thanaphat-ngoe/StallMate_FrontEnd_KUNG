@@ -31,7 +31,7 @@ import { ClientAuthProvider, useClientAuth } from './utilities/ClientAuthContext
 
 import OwnerPrivateRoute from './utilities/OwnerPrivateRoute';
 import { OwnerAuthProvider } from './utilities/OwnerAuthContext';
-import OwnerHistory from './owner`Pages/OwnerHistory';
+import OwnerHistory from './ownerPages/OwnerHistory';
 
 {/* Hooks components */}
 import { useCookieAuth } from "./hooks/useCookieAuth";
