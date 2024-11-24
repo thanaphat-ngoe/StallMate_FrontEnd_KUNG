@@ -1,34 +1,38 @@
+// React & Redux
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, useLocation } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
+import { useParams } from "react-router-dom";
+
+// Context & State Management
 import { useClientAuth } from '../utilities/ClientAuthContext';
+import { addItem } from '../clientComponents/CartSlice';
+
+// Bootstrap Components
+import { Dropdown } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+// Custom Components
 import Header from "../clientComponents/Header";
 import CartItem from '../clientComponents/CartItem';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { addItem } from '../clientComponents/CartSlice';
-import shoplogo from "../assets/shoplogo.png"
-import { Dropdown } from 'react-bootstrap';
-import rice from '../assets/rice.png'
-import addCart from '../assets/addcart.png'
-import arrow from "../assets/arrow-left.svg"
-import search from "../assets/search.svg"
-import langIcon from '../assets/lang.png'
+import StallInfo from '../clientComponents/StallInfo';
+import FavoriteIcon from '../clientComponents/FavoriteIcon';
+
+// Assets
+import ArrowSVG from "../assets/arrow-left.svg";
+import LanguageIMG from '../assets/lang.png';
+import InfoSVG from '../assets/info.svg';
+
+// Utilities
 import axios from 'axios';
-import info from '../assets/info.svg'
-import StallInfo from '../clientComponents/StallInfo'
-import FavoriteIcon from '../clientComponents/FavoriteIcon'
 
-
+// Back-End base URL
+const BACK_END_BASE_URL = import.meta.env.VITE_API_BACK_END_BASE_URL;
 
 const ResNMenu = () => {
-	const BACK_END_BASE_URL = import.meta.env.VITE_API_BACK_END_BASE_URL;
-	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const [selectedItem, setSelectedItem] = useState(null);
 	const cartItems = useSelector((state) => state.cart.items);
+	const [selectedItem, setSelectedItem] = useState(null);
 	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
 	const [isCartVisible, setIsCartVisible] = useState(false);
 	const [restaurants, setRestaurants] = useState();
 	const [selectedLanguage, setSelectedLanguage] = useState("English");
@@ -36,9 +40,6 @@ const ResNMenu = () => {
 	const [infoVisible, setInfoVisible] = useState(false);
 	const [isFav, setIsFav] = useState(false);
 	const { authData } = useClientAuth();
-
-	const location = useLocation();
-
 	const ownerID = useParams();
 
 	useEffect(() => {
@@ -60,7 +61,7 @@ const ResNMenu = () => {
             }
         };
         checkAuth();
-    }, [location.pathname]);
+    }, []);
 
 	console.log(loading);
 	console.log(ownerID.ownerID);
@@ -143,7 +144,7 @@ const ResNMenu = () => {
 								style={{ height: "20vw", background: "#191A1F", zIndex: 1000, padding: "5vw" }}
 							>
 								<img
-									src={arrow}
+									src={ArrowSVG}
 									alt=""
 									onClick={handleContinueShopping}
 								/>
@@ -162,7 +163,7 @@ const ResNMenu = () => {
 										<Dropdown onSelect={handleSelectLanguage} style={{ marginTop: "6vw" }}>
 											<Dropdown.Toggle id="dropdown-basic" style={{ fontSize: "3.5vw", display: "flex", alignItems: "center", color: "black", fontWeight: 600, background: "#4CF986" }}>
 												<img
-													src={langIcon}
+													src={LanguageIMG}
 													alt="Language Icon"
 													style={{ width: "5vw", height: "5vw", marginRight: "1vw" }}
 												/>
@@ -251,7 +252,7 @@ const ResNMenu = () => {
 								style={{ height: "20vw", background: "#191A1F", zIndex: 1000, padding: "5vw" }}
 							>
 								<img
-									src={arrow}
+									src={ArrowSVG}
 									alt=""
 									onClick={() => setInfoVisible(!infoVisible)}
 								/>
@@ -275,7 +276,7 @@ const ResNMenu = () => {
 										<Dropdown onSelect={handleSelectLanguage} style={{ marginTop: "2vw" }}>
 												<Dropdown.Toggle id="dropdown-basic" style={{ fontSize: "3.5vw", color: "black", fontWeight: 600, background: "#4CF986" }}>
 													<img
-														src={langIcon}
+														src={LanguageIMG}
 														alt="Language Icon"
 														style={{ width: "5vw", height: "5vw", marginRight: "1vw" }}
 													/>
@@ -289,7 +290,7 @@ const ResNMenu = () => {
 											<div className='col-12 d-flex align-items-center justify-content-between' style={{marginTop:"2vw"}}>
 												<FavoriteIcon customerID={authData.clientData.clientID} stallownerID={ownerID}/>
 												<span className='d-flex align-items-center justify-content-end'>
-													<img src={info} alt="" style={{width:"7.5vw", marginRight:"2vw"}} onClick={() => setInfoVisible(!infoVisible)}/>
+													<img src={InfoSVG} alt="" style={{width:"7.5vw", marginRight:"2vw"}} onClick={() => setInfoVisible(!infoVisible)}/>
 												</span>
 											</div>
 										

@@ -4,41 +4,45 @@ import axios from "axios";
 const FavoriteIcon = ({ customerID, stallownerID }) => {
     const BACK_END_BASE_URL = import.meta.env.VITE_API_BACK_END_BASE_URL;
     const [isFav, setIsFav] = useState(false);
-    
+
     useEffect(() => {
         const fetchFavoriteStatus = async () => {
             try {
-                const response = await axios.get(`${BACK_END_BASE_URL}/dashboard/customer/${customerID}/favorite`, { withCredentials: true });
-                console.log("Response Data:", response.data.favorites);
-                console.log("Stall Owner ID:", stallownerID);
-                const extractedStallOwnerID = typeof stallownerID === 'object' ? stallownerID.ownerID : stallownerID;
-                const favoriteStalls = response.data.favorites.filter(stall => stall.id === extractedStallOwnerID);
-                console.log("Filtered Favorites:", favoriteStalls);
-                if (favoriteStalls.length > 0) {
-                    setIsFav(true);
-                }
+                const response = await axios.get(
+                    `${BACK_END_BASE_URL}/dashboard/customer/${customerID}/favorite`,
+                    { withCredentials: true }
+                );
+
+                const favorites = response.data.favorites || [];
+                const extractedStallOwnerID = 
+                    typeof stallownerID === "object" ? stallownerID.ownerID : stallownerID;
+
+                const isFavorite = favorites.some(
+                    (stall) => stall.id === extractedStallOwnerID
+                );
+
+                setIsFav(isFavorite);
             } catch (error) {
                 console.error("Error fetching favorite status:", error);
             }
         };
-    
+
         fetchFavoriteStatus();
     }, [customerID, stallownerID]);
-    
 
     const handleFav = async () => {
         try {
-            const ownerID = stallownerID?.ownerID;
-            if (!ownerID) {
-                throw new Error("Invalid Stall Owner ID");
-            }
-            console.log("Customer ID:", customerID); 
-            console.log("Stall Owner ID:", ownerID); 
+            const ownerID = stallownerID?.ownerID || stallownerID;
+            if (!ownerID) throw new Error("Invalid Stall Owner ID");
+
+            const endpoint = `${BACK_END_BASE_URL}/dashboard/customer/${customerID}/favorite/${ownerID}`;
+            const config = { withCredentials: true };
+
             if (isFav) {
-                await axios.delete(`${BACK_END_BASE_URL}/dashboard/customer/${customerID}/favorite/${ownerID}`, { withCredentials: true });
+                await axios.delete(endpoint, config);
                 setIsFav(false);
             } else {
-                await axios.put(`${BACK_END_BASE_URL}/dashboard/customer/${customerID}/favorite/${ownerID}`, {}, { withCredentials: true });
+                await axios.put(endpoint, {}, config);
                 setIsFav(true);
             }
         } catch (error) {
@@ -49,11 +53,12 @@ const FavoriteIcon = ({ customerID, stallownerID }) => {
 
     return (
         <span
-            className="d-flex align-items-center justify-content-start"
+            className="favorite-icon d-flex align-items-center justify-content-start"
             onClick={handleFav}
+            style={{ cursor: "pointer" }}
         >
             <svg
-                fill={isFav ? "#B01E28" : "#FFFFFF"} 
+                fill={isFav ? "#B01E28" : "#FFFFFF"}
                 height="6vw"
                 width="6vw"
                 xmlns="http://www.w3.org/2000/svg"
