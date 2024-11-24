@@ -40,7 +40,7 @@ const RootProtectedRoute = ({ children }) => {
 
 				if (response.status === 200 && response.data.userType === role) {
 					setIsAuthenticated(true);
-					setRedirectPath(role === "Customer" ? "/clientHome" : "/ownerProfile");
+					setRedirectPath(role === "Customer" ? "/clientHome" : "/ownerStallProfile");
 				} else {
 					setIsAuthenticated(false); 
 				}

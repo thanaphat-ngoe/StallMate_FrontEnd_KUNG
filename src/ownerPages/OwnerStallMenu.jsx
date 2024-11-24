@@ -1,26 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import shoplogo from "../assets/shoplogo.png"
-import { Dropdown } from 'react-bootstrap';
-import rice from '../assets/rice.png'
-import langIcon from '../assets/lang.png'
-import editLogo from '../assets/edit.svg'
-import arrow from '../assets/arrow-left.svg'
-import menuName from '../assets/menuName.png';
-import dollar from '../assets/dollar.png';
-import cloud from '../assets/Cloud.png';
-import "bootstrap-icons/font/bootstrap-icons.css";
-import search from "../assets/search.svg";
-import stallqr from '../assets/stallqr.png';
-import catego from '../assets/catego.svg';
-import shop from '../assets/shop.svg';
-import locationLogo from '../assets/location.svg';
 import { useOwnerAuth } from '../utilities/OwnerAuthContext';
+import { Dropdown } from 'react-bootstrap';
 import axios from 'axios';
 
+import ShopLogo from "../assets/shoplogo.png"
+import RiceIMG from '../assets/rice.png'
+import LangICON from '../assets/lang.png'
+import EditLogoSVG from '../assets/edit.svg'
+import ArrowSVG from '../assets/arrow-left.svg'
+import MenuNameIMG from '../assets/menuName.png';
+import DollarIMG from '../assets/dollar.png';
+import CloudIMG from '../assets/Cloud.png';
+import SearchSVG from "../assets/search.svg";
+import StallQRCodeIMG from '../assets/stallqr.png';
+import CategorySVG from '../assets/catego.svg';
+import ShopSVG from '../assets/shop.svg';
+import LocationSVG from '../assets/location.svg';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap-icons/font/bootstrap-icons.css";
+
+const BACK_END_BASE_URL = import.meta.env.VITE_API_BACK_END_BASE_URL;
+
 const OwnerStallMenu = () => {
-	const BACK_END_BASE_URL = import.meta.env.VITE_API_BACK_END_BASE_URL;
+	
 	const { authData } = useOwnerAuth();
 	const [selectedRestaurant, setSelectedRestaurant] = useState(null);
 	const navigate = useNavigate();
@@ -75,7 +79,7 @@ const OwnerStallMenu = () => {
 			{
 				"restaurant_id": "12345",
 				"restaurant_name": "Delicious Bites",
-				"restaurant_image": shoplogo,
+				"restaurant_image": ShopLogo,
 				"rating": 4.5,
 				"qr_code": "https://imageawsmenubucket.s3.ap-southeast-1.amazonaws.com/qrcodes/6723b36780c1b29068338c17-6918f546-fd75-4a5a-ac5f-f045c27e6411.png",
 				"categories": {
@@ -87,7 +91,7 @@ const OwnerStallMenu = () => {
 							"description": "ข้าวผัดหอมๆ กับกุ้งสด",
 							"description_en": "Fragrant fried rice with fresh shrimp.",
 							"price": 80,
-							"imageUrl": rice
+							"imageUrl": RiceIMG
 						},
 						{
 							"_id": "efgh5678",
@@ -96,7 +100,7 @@ const OwnerStallMenu = () => {
 							"description": "ผัดไทยเส้นเล็กใส่ไข่",
 							"description_en": "Stir-fried rice noodles with egg.",
 							"price": 60,
-							"imageUrl": rice
+							"imageUrl": RiceIMG
 						}
 					],
 					"Drinks": [
@@ -107,7 +111,7 @@ const OwnerStallMenu = () => {
 							"description": "ชาไทยสูตรต้นตำรับ",
 							"description_en": "Authentic Thai tea.",
 							"price": 25,
-							"imageUrl": rice
+							"imageUrl": RiceIMG
 						},
 						{
 							"_id": "mnop1121",
@@ -116,7 +120,7 @@ const OwnerStallMenu = () => {
 							"description": "น้ำมะนาวสด ชื่นใจ",
 							"description_en": "Refreshing fresh lemonade.",
 							"price": 30,
-							"imageUrl": rice
+							"imageUrl": RiceIMG
 						}
 					]
 				},
@@ -413,27 +417,22 @@ const OwnerStallMenu = () => {
 
 
 	return (
-		<div className="container-fluid">
+		<div className="container-fluid"> 
 			{selectedRestaurant ? (
 				selectedMenu ? (
 					<div>
-
 						<div className="container-fluid">
-							<div
-								className="container-fluid d-flex fixed-top justify-content-between align-items-center text-white"
-								style={{ height: "20vw", background: "#191A1F", zIndex: 1000, padding: "4vw" }}
-							>
-								<img src={arrow} alt="" onClick={handleBackBtn} />
+							<div className="container-fluid d-flex fixed-top justify-content-between align-items-center text-white" style={{ height: "20vw", background: "#191A1F", zIndex: 1000, padding: "4vw" }}>
+								<img src={ArrowSVG} alt="" onClick={handleBackBtn} />
 								<p className="display-5" style={{ marginRight: "37vw", marginTop: "2vw" }}>Menu</p>
 							</div>
 						</div>
-
 
 						<div className='row' style={{ marginTop: "20vw", display: "flex", flexDirection: "column", alignItems: "center" }}>
 							<img src={selectedMenu.imageUrl} alt="" style={{ width: "60vw" }} />
 							<form onSubmit={handleSubmit} className='d-flex flex-column justify-content-center align-items-center' style={{ position: "relative" }}>
 								<img
-									src={editLogo}
+									src={EditLogoSVG}
 									alt="Edit Logo"
 									style={{ width: "12vw", position: "absolute", left: "70vw", top: "-10vw", cursor: "pointer" }}
 									onClick={handleImageClick}
@@ -442,7 +441,7 @@ const OwnerStallMenu = () => {
 
 								<div className="input-group d-flex justify-content-center align-items-center" style={{ marginBottom: "3vw", marginTop: "6vw" }}>
 									<span className='d-flex justify-content-center align-items-center' style={{ background: "#01040F", border: "none", height: "15vw", width: "15vw", marginTop: "-1vw", borderRadius: "2vw 0 0 2vw" }}>
-										<img src={menuName} alt="" style={{ height: "8vw" }} />
+										<img src={MenuNameIMG} alt="" style={{ height: "8vw" }} />
 									</span>
 									<input
 										className='text-white'
@@ -455,7 +454,7 @@ const OwnerStallMenu = () => {
 								</div>
 								<div className="input-group d-flex justify-content-center align-items-center" style={{ marginBottom: "3vw" }}>
 									<span className='d-flex justify-content-center align-items-center' style={{ background: "#01040F", border: "none", height: "15vw", width: "15vw", marginTop: "-1vw", borderRadius: "2vw 0 0 2vw" }}>
-										<img src={dollar} alt="" style={{ height: "8vw" }} />
+										<img src={DollarIMG} alt="" style={{ height: "8vw" }} />
 									</span>
 									<input
 										className='text-white'
@@ -468,7 +467,7 @@ const OwnerStallMenu = () => {
 								</div>
 								<div className="input-group d-flex justify-content-center align-items-center" style={{ marginBottom: "3vw" }}>
 									<span className='d-flex justify-content-center align-items-center' style={{ background: "#01040F", border: "none", height: "15vw", width: "15vw", marginTop: "-1vw", borderRadius: "2vw 0 0 2vw" }}>
-										<img src={cloud} alt="" style={{ height: "8vw" }} />
+										<img src={CloudIMG} alt="" style={{ height: "8vw" }} />
 									</span>
 									<input
 										className='text-white'
@@ -498,7 +497,7 @@ const OwnerStallMenu = () => {
 									className="container-fluid d-flex fixed-top justify-content-between align-items-center text-white"
 									style={{ height: "20vw", background: "#191A1F", zIndex: 1000, padding: "4vw" }}
 								>
-									<img src={arrow} alt="" onClick={handleEditRes} />
+									<img src={ArrowSVG} alt="" onClick={handleEditRes} />
 									<p className="display-5" style={{ marginRight: "37vw", marginTop: "2vw" }}>Menu</p>
 								</div>
 							</div>
@@ -508,7 +507,7 @@ const OwnerStallMenu = () => {
 								<img src={selectedRestaurant.restaurant_image} alt="" style={{ width: "60vw" }} />
 								<form onSubmit={handleResSubmit} className='d-flex flex-column justify-content-center align-items-center' style={{ position: "relative" }}>
 									<img
-										src={editLogo}
+										src={EditLogoSVG}
 										alt="Edit Logo"
 										style={{ width: "12vw", position: "absolute", left: "70vw", top: "-10vw", cursor: "pointer" }}
 										onClick={handleResImageClick}
@@ -517,7 +516,7 @@ const OwnerStallMenu = () => {
 
 									<div className="input-group d-flex justify-content-center align-items-center" style={{ marginBottom: "3vw", marginTop: "6vw" }}>
 										<span className='d-flex justify-content-center align-items-center' style={{ background: "#01040F", border: "none", height: "15vw", width: "15vw", marginTop: "-1vw", borderRadius: "2vw 0 0 2vw" }}>
-											<img src={shop} alt="" style={{ height: "8vw" }} />
+											<img src={ShopSVG} alt="" style={{ height: "8vw" }} />
 										</span>
 										<input
 											className='text-white'
@@ -530,7 +529,7 @@ const OwnerStallMenu = () => {
 									</div>
 									<div className="input-group d-flex justify-content-center align-items-center" style={{ marginBottom: "3vw" }}>
 										<span className='d-flex justify-content-center align-items-center' style={{ background: "#01040F", border: "none", height: "15vw", width: "15vw", marginTop: "-1vw", borderRadius: "2vw 0 0 2vw" }}>
-											<img src={locationLogo} alt="" style={{ height: "8vw" }} />
+											<img src={LocationSVG} alt="" style={{ height: "8vw" }} />
 										</span>
 										<input
 											className='text-white'
@@ -731,7 +730,7 @@ const OwnerStallMenu = () => {
 									className="container-fluid d-flex fixed-top justify-content-between align-items-center text-white"
 									style={{ height: "20vw", background: "#191A1F", zIndex: 1000, padding: "4vw" }}
 								>
-									<img src={arrow} alt="" onClick={handleAddBtn} />
+									<img src={ArrowSVG} alt="" onClick={handleAddBtn} />
 								</div>
 							</div>
 
@@ -741,7 +740,7 @@ const OwnerStallMenu = () => {
 								<img src={selectedAddMenu.imageUrl} style={{ width: "60vw", marginBottom: "12vw", color: "white" }} />
 								<form onSubmit={handleMenuCreate} className='d-flex flex-column justify-content-center align-items-center' style={{ position: "relative" }}>
 									<img
-										src={editLogo}
+										src={EditLogoSVG}
 										alt="Edit Logo"
 										style={{ width: "12vw", position: "absolute", left: "70vw", top: "-10vw", cursor: "pointer" }}
 										onClick={handleAddImageClick}
@@ -750,7 +749,7 @@ const OwnerStallMenu = () => {
 
 									<div className="input-group d-flex justify-content-center align-items-center" style={{ marginBottom: "3vw", marginTop: "6vw" }}>
 										<span className='d-flex justify-content-center align-items-center' style={{ background: "#01040F", border: "none", height: "15vw", width: "15vw", marginTop: "-1vw", borderRadius: "2vw 0 0 2vw" }}>
-											<img src={menuName} alt="" style={{ height: "8vw" }} />
+											<img src={MenuNameIMG} alt="" style={{ height: "8vw" }} />
 										</span>
 										<input
 											className='text-white'
@@ -765,7 +764,7 @@ const OwnerStallMenu = () => {
 									</div>
 									<div className="input-group d-flex justify-content-center align-items-center" style={{ marginBottom: "3vw" }}>
 										<span className='d-flex justify-content-center align-items-center' style={{ background: "#01040F", border: "none", height: "15vw", width: "15vw", marginTop: "-1vw", borderRadius: "2vw 0 0 2vw" }}>
-											<img src={dollar} alt="" style={{ height: "8vw" }} />
+											<img src={DollarIMG} alt="" style={{ height: "8vw" }} />
 										</span>
 										<input
 											className='text-white'
@@ -780,7 +779,7 @@ const OwnerStallMenu = () => {
 									</div>
 									<div className="input-group d-flex justify-content-center align-items-center" style={{ marginBottom: "3vw" }}>
 										<span className='d-flex justify-content-center align-items-center' style={{ background: "#01040F", border: "none", height: "15vw", width: "15vw", marginTop: "-1vw", borderRadius: "2vw 0 0 2vw" }}>
-											<img src={cloud} alt="" style={{ height: "8vw" }} />
+											<img src={CloudIMG} alt="" style={{ height: "8vw" }} />
 										</span>
 										<input
 											className='text-white'
@@ -795,7 +794,7 @@ const OwnerStallMenu = () => {
 									</div>
 									<div className="input-group d-flex justify-content-center align-items-center" style={{ marginBottom: "3vw" }}>
 										<span className='d-flex justify-content-center align-items-center' style={{ background: "#01040F", border: "none", height: "15vw", width: "15vw", marginTop: "-1vw", borderRadius: "2vw 0 0 2vw" }}>
-											<img src={catego} alt="" style={{
+											<img src={CategorySVG} alt="" style={{
 												height: "8vw",
 												filter: "invert(65%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%)"
 											}} />
@@ -828,7 +827,7 @@ const OwnerStallMenu = () => {
 									className="container-fluid d-flex fixed-top justify-content-between align-items-center text-white"
 									style={{ height: "20vw", background: "#191A1F", zIndex: 1000, padding: "4vw" }}
 								>
-									<img src={arrow} alt="" onClick={handleQr} />
+									<img src={ArrowSVG} alt="" onClick={handleQr} />
 								</div>
 								<div className="card text-white" style={{ marginBottom: "6vw", marginTop: "21vw", background: "#01040F", borderRadius: "5vw", padding: "1vw", marginRight: "1vw", marginLeft: "1vw" }}>
 									<div className="row d-flex align-items-center justify-content-center" style={{ marginBottom: "3vw" }}>
@@ -855,19 +854,19 @@ const OwnerStallMenu = () => {
 									style={{ height: "20vw", background: "#191A1F", zIndex: 1000, padding: "4vw" }}
 								>
 									<img
-										src={arrow}
+										src={ArrowSVG}
 										alt=""
 										onClick={handleHeadBackBtn}
 									/>
 									<div>
 										<img
-											src={stallqr}
+											src={StallQRCodeIMG}
 											alt=""
 											onClick={handleQr}
 											style={{ width: "7vw", marginRight: "5vw" }}
 										/>
 										<img
-											src={search}
+											src={SearchSVG}
 											alt=""
 											onClick={handleSearchBtn}
 										/>
@@ -911,7 +910,7 @@ const OwnerStallMenu = () => {
 									</div>
 									<div className="col">
 										<div className="row d-flex align-items-center justify-content-end">
-											<img src={editLogo} alt="" style={{ width: "10vw", marginRight: "6vw" }} onClick={handleEditRes} />
+											<img src={EditLogoSVG} alt="" style={{ width: "10vw", marginRight: "6vw" }} onClick={handleEditRes} />
 											<h1 style={{ fontSize: "7vw", marginBottom: "2vw" }}>
 												{selectedRestaurant.restaurant_name}
 											</h1>
@@ -921,7 +920,7 @@ const OwnerStallMenu = () => {
 										</p>
 										<Dropdown onSelect={handleSelectLanguage} style={{ marginTop: "2vw" }}>
 											<Dropdown.Toggle variant="success" id="dropdown-basic" style={{ fontSize: "3.5vw", color: "black", fontWeight: 600, background: "#4CF986" }}>
-												<img src={langIcon} alt="Language Icon" style={{ width: "5vw", height: "5vw", marginRight: "1vw" }} />
+												<img src={LangICON} alt="Language Icon" style={{ width: "5vw", height: "5vw", marginRight: "1vw" }} />
 												{selectedLanguage}
 											</Dropdown.Toggle>
 											<Dropdown.Menu>
@@ -960,7 +959,7 @@ const OwnerStallMenu = () => {
 																	{item.price} THB
 																</span>
 																<span onClick={() => handleFoodClick(item)}>
-																	<img src={editLogo} alt="" />
+																	<img src={EditLogoSVG} alt="" />
 																</span>
 															</div>
 														</div>

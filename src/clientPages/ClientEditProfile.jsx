@@ -66,14 +66,11 @@ const ClientEditProfile = () => {
             setSuccessMessage(response.data.message); // Show success message
         } catch (err) {
             if (err.response) {
-                // Server responded with a status code outside the 2xx range
-                setError(err.response.data.message || 'An error occurred while updating the profile.');
+                setError(err.response.data.message || 'An error occurred while updating the profile.'); // Server responded with a status code outside the 2xx range
             } else if (err.request) {
-                // No response was received
-                setError('No response from the server. Please try again later.');
+                setError('No response from the server. Please try again later.'); // No response was received
             } else {
-                // Request setup triggered an error
-                setError('Request error: ' + err.message);
+                setError('Request error: ' + err.message); // Request setup triggered an error
             }
         }
     };

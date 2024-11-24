@@ -46,7 +46,7 @@ const OrderQueue = () => {
 	}, [detail]);
 
 	const handleBackBtn = () => {
-		navigate("/ownerProfile");
+		navigate("/ownerStallProfile");
 	};
 
 	const handleCardClick = (order) => {
