@@ -1,7 +1,12 @@
+// React
 import React from 'react';
+
+// Assets
 import loadingIcon from './assets/checkingout.png';
 import stallIcon from './assets/stall.png';
 import userIcon from './assets/person.png';
+
+// Styles
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './RoleSelect.css';
 
