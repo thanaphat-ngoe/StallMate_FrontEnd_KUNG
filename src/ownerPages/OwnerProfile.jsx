@@ -98,6 +98,7 @@ const OwnerProfile = () => {
   const [selectedDay, setSelectedDay] = useState("Monday");
   const navigate = useNavigate();
   const handleQueue = () => {
+
     navigate('/ownerOrderQueue') 
   }
 
@@ -116,9 +117,7 @@ const OwnerProfile = () => {
 	const handleHistory = () => {
 		navigate("/ownerHistory")
 	}
-	const handleHistory = () => {
-		navigate("/ownerHistory")
-	}
+	
 	
 	const [profilePresence, setProfilePresence] = useState(true);
 
