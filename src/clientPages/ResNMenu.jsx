@@ -16,6 +16,9 @@ import langIcon from '../assets/lang.png'
 import axios from 'axios';
 import info from '../assets/info.svg'
 import StallInfo from '../clientComponents/StallInfo'
+import FavoriteIcon from '../clientComponents/FavoriteIcon'
+
+
 
 const ResNMenu = () => {
 	const navigate = useNavigate();
@@ -29,6 +32,7 @@ const ResNMenu = () => {
 	const [selectedLanguage, setSelectedLanguage] = useState("English");
 	const [selectedCat, setSelectedCat] = useState("All");
 	const [infoVisible, setInfoVisible] = useState(false);
+	const [isFav, setIsFav] = useState(false);
 
 	const location = useLocation();
 
@@ -119,6 +123,10 @@ const ResNMenu = () => {
 			setSelectedCat(categoryList[parseInt(eventKey) - 1]);
 		}
 	};
+
+	const handleFav = () => {
+		setIsFav(!isFav);
+	}
 
 
 	return (
@@ -259,6 +267,7 @@ const ResNMenu = () => {
 										<h1 className="mb-4" style={{ fontSize: '7vw' }}>{selectedRestaurant.restaurant_name}</h1>
 										<p className="card-text text-white" style={{ fontSize: "4vw" }}>
 											<i className="bi bi-star" style={{ color: 'yellow' }}></i> {selectedRestaurant.rating.average}
+											
 										</p>
 										<Dropdown onSelect={handleSelectLanguage} style={{ marginTop: "2vw" }}>
 												<Dropdown.Toggle id="dropdown-basic" style={{ fontSize: "3.5vw", color: "black", fontWeight: 600, background: "#4CF986" }}>
@@ -274,9 +283,12 @@ const ResNMenu = () => {
 													<Dropdown.Item eventKey="2">Thai</Dropdown.Item>
 												</Dropdown.Menu>
 											</Dropdown>
-											<span className='d-flex align-items-center justify-content-end'>
-												<img src={info} alt="" style={{width:"7.5vw", marginRight:"2vw"}} onClick={() => setInfoVisible(!infoVisible)}/>
-											</span>
+											<div className='col-12 d-flex align-items-center justify-content-between' style={{marginTop:"2vw"}}>
+												<FavoriteIcon stallownerID={ownerID}/>
+												<span className='d-flex align-items-center justify-content-end'>
+													<img src={info} alt="" style={{width:"7.5vw", marginRight:"2vw"}} onClick={() => setInfoVisible(!infoVisible)}/>
+												</span>
+											</div>
 										
 									</div>
 								</div>

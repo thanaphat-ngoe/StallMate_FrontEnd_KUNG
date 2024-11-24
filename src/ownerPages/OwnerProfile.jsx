@@ -94,17 +94,25 @@ export const HISTORY_ICON = (
 );  
 
 const OwnerProfile = () => {
-	const { authData } = useOwnerAuth();
-	const [selectedDay, setSelectedDay] = useState("Monday");
-	const navigate = useNavigate();
+  const { authData } = useOwnerAuth();
+  const [selectedDay, setSelectedDay] = useState("Monday");
+  const navigate = useNavigate();
+  const handleQueue = () => {
+    navigate('/ownerOrderQueue') 
+  }
 
 	const handleChangeName = () => { navigate("/ownerEditProfile"); };
 
-	const handleMenuEdit = () => { navigate("/ownerMenu"); };
-	
-	const handleWallet = () => { console.log("wallet"); };
+	const handleMenuEdit = () => {
+		navigate("/StallMenu");
+	};
+	const handleOrderQueue = () => {
+		navigate("/ownerOrderQueue");
+	};
+	const handleWallet = () => {
+		console.log("wallet");
+	};
 
-	const handleQueue = () => { navigate("/ownerOrderQueue"); };
 	
 	const [profilePresence, setProfilePresence] = useState(true);
 
