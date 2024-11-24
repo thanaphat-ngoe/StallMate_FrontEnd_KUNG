@@ -97,6 +97,10 @@ console.log(authData);
   const handleQueue = () => {
     navigate("/ownerOrderQueue");
   };
+
+  const handleHistory = () => {
+	navigate("/ownerHistory")
+  }
   const [profilePresence, setProfilePresence] = useState(true);
 
   const [profile, setProfile] = useState({
@@ -307,7 +311,7 @@ console.log(authData);
 							<p className="text-white fw-bold ">Queue</p>
 						</div>
 						<div
-							onClick={handleWallet}
+							onClick={handleHistory}
 							className="col d-flex mx-1 flex-column justify-content-center border-0 align-items-center"
 							style={{
 								height: "120px",

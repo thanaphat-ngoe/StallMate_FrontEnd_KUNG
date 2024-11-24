@@ -21,6 +21,7 @@ import OwnerLogin from './ownerPages/OwnerLogin';
 import OwnerProfile from './ownerPages/OwnerProfile';
 import OwnerEditProfile from './ownerPages/OwnerEditProfile';
 import StallMenu from './ownerPages/StallMenu';
+import OwnerHistory from './ownerPages/OwnerHistory';
 
 {/* Utilities components */}
 import RootProtectedRoute from "./utilities/RootProtectedRoute";
@@ -78,6 +79,7 @@ function App() {
 					<Route path="/ownerEditProfile" element={  <OwnerEditProfile/> }/>
 					{/* add new Rount na kung please recheck for nine t */}
 					<Route path="/ownerOrderQueue" element = {<OwnerOrderQueue />} />
+					<Route path="/ownerHistory" element = {<OwnerHistory />} />
         		</Route>
 
 
