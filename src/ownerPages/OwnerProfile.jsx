@@ -98,6 +98,7 @@ const OwnerProfile = () => {
   const [selectedDay, setSelectedDay] = useState("Monday");
   const navigate = useNavigate();
   const handleQueue = () => {
+
     navigate('/ownerOrderQueue') 
   }
 
@@ -113,6 +114,10 @@ const OwnerProfile = () => {
 		console.log("wallet");
 	};
 
+	const handleHistory = () => {
+		navigate("/ownerHistory")
+	}
+	
 	
 	const [profilePresence, setProfilePresence] = useState(true);
 
@@ -311,7 +316,7 @@ const OwnerProfile = () => {
 							<p className="text-white fw-bold ">Queue</p>
 						</div>
 						<div
-							onClick={handleWallet}
+							onClick={handleHistory}
 							className="col d-flex mx-1 flex-column justify-content-center border-0 align-items-center"
 							style={{
 								height: "120px",

@@ -31,6 +31,7 @@ import { ClientAuthProvider, useClientAuth } from './utilities/ClientAuthContext
 
 import OwnerPrivateRoute from './utilities/OwnerPrivateRoute';
 import { OwnerAuthProvider } from './utilities/OwnerAuthContext';
+import OwnerHistory from './ownerPages/OwnerHistory';
 
 {/* Hooks components */}
 import { useCookieAuth } from "./hooks/useCookieAuth";
@@ -69,10 +70,11 @@ function App() {
 				
 				{/* Owner private route */}
 				<Route element={ <OwnerAuthProvider> <OwnerPrivateRoute/> </OwnerAuthProvider> }>
-					<Route path="/ownerProfile" element={ <OwnerProfile/> }/>
-					<Route path="/ownerEditProfile" element={ <OwnerEditProfile/> }/>
-					<Route path="/ownerMenu" element={ <OwnerStallMenu/> }/>
-					<Route path="/ownerOrderQueue" element = { <OwnerOrderQueue />} />
+					<Route path="/ownerProfile" element={  <OwnerProfile/> }/>
+					<Route path="/ownerEditProfile" element={  <OwnerEditProfile/> }/>
+					{/* add new Rount na kung please recheck for nine t */}
+					<Route path="/ownerOrderQueue" element = {<OwnerOrderQueue />} />
+					<Route path="/ownerHistory" element = {<OwnerHistory />} />
         		</Route>
 
 
