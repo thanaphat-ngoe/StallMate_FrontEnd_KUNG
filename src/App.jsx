@@ -15,12 +15,13 @@ import ClientWallet from './clientPages/ClientWallet';
 import ClientNavBar from './clientComponents/ClientNavBar';
 import ResNMenu from './clientPages/ResNMenu';
 import Loading from './Loading';
+import ClientFavourite from './clientPages/ClientFavourite';
 
 {/* Owner pages */}
 import OwnerLogin from './ownerPages/OwnerLogin';
 import OwnerProfile from './ownerPages/OwnerProfile';
 import OwnerEditProfile from './ownerPages/OwnerEditProfile';
-// import OwnerStallMenu from './ownerPages/OwnerStallMenu';
+import OwnerStallMenu from './ownerPages/OwnerStallMenu';
 import OwnerOrderQueue from './ownerPages/OwnerOrderQueue';
 
 {/* Utilities components */}
@@ -65,13 +66,15 @@ function App() {
 					<Route path="/clientWallet" element={ <HomeWithNavbar component= { <ClientWallet/> }/> }/>
 					<Route path="/requestMenu/:ownerID" element={ <ResNMenu/> }/>
 					<Route path="/checkingout" element={ <Loading/> }/>
+					<Route path="/clientFavourite" element={ <ClientFavourite/> }/>
         		</Route>
 				
 				{/* Owner private route */}
 				<Route element={ <OwnerAuthProvider> <OwnerPrivateRoute/> </OwnerAuthProvider> }>
 					<Route path="/ownerProfile" element={  <OwnerProfile/> }/>
 					<Route path="/ownerEditProfile" element={  <OwnerEditProfile/> }/>
-					<Route path="/ownerOrderQueue" element = { <OwnerOrderQueue />} />
+					<Route path="/ownerStallMenu" element = { <OwnerStallMenu/>} />
+					<Route path="/ownerOrderQueue" element = { <OwnerOrderQueue/>} />
         		</Route>
 
 

@@ -1,0 +1,89 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+.Fav-Head {
+	display: flex;
+	justify-content: space-between;
+	align-items: stretch;
+	margin-top: 5.349vw;
+}
+
+.Fav-Head p {
+	color: #FFFFFF;
+	font-family: 'poppins';
+	font-weight: 600;
+	font-size: 5.581vw;
+	margin-left: 11.628vw;
+}
+
+.Fav-Head svg {
+	height: 5.349vw;
+	width: 5.349vw;
+	margin-right: 14.419vw;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.back-but svg {
+	height: 6.977vw;
+	width: 6.977vw;
+	margin-top: 10.465vw;
+	margin-left: 4.651vw;
+
+}
+
+.stall-shown {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.details-shown {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 86.047vw;
+	height: 17.674vw;
+	background-color: #191A1F;
+	color: white;
+	border-bottom: 0.465vw solid white;
+	margin-top: 3.488vw;
+	margin-left: 11.628vw;
+	margin-right: 11.628vw;
+}
+
+.details-shown img {
+	width: 13.721vw;
+	height: 14.651vw;
+	margin-left: 3.488vw;
+}
+
+#name {
+	font-size: 3.721vw;
+	font-weight: 400;
+	margin: 0;
+	flex: 1;
+}
+
+#rate {
+	display: flex;
+	align-items: center;
+	font-size: 3.721vw;
+	font-weight: 400;
+	margin-right: 3.488vw;
+	margin-top: 0;
+	margin-bottom: 0;
+	color: #ffffff;
+}
+
+#rate::before {
+	content: "★";
+	font-size: 3.721vw;
+	color: #FFD700;
+	margin-right: 3.488vw;
+	margin-top: 0;
+	margin-bottom: 0;
+}

@@ -1,15 +1,11 @@
-// React & Router
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-// Authentication & Custom Hooks
 import { useClientAuth } from "../utilities/ClientAuthContext";
 import { useCookieAuth } from "../hooks/useCookieAuth";
 
-// Utilities
 import axios from "axios";
 
-// Styles
 import style from "./ClientEditProfile.module.css";
 
 const LEFT_ARROW = (
@@ -28,24 +24,19 @@ const CAMERA = (
 const BACK_END_BASE_URL = import.meta.env.VITE_API_BACK_END_BASE_URL;
 
 const ClientEditProfile = () => {
-	const navigate = useNavigate();
-
 	const { authData } = useClientAuth();
-
 	const { clearRole } = useCookieAuth();
-	
 	const [ isEditing, setIsEditing ] = useState(false);
-
-	const [ localClientName, setLocalClientName ] = useState(authData?.clientData.clientName || "");
-
+	
+	const navigate = useNavigate();
 	const HandleBackBtn = () => { navigate('/clientHome'); };
 
 	const HandleLogout = async () => {
 		await axios.get(`${BACK_END_BASE_URL}/auth/logout`, { withCredentials: true })
 		.then(response => {
-        	console.log(response.data.message); // 'Logout successful'
-        	clearRole(); // Clear token or local auth state
-        	window.location.href = '/'; // Redirect to the login page or home
+        	console.log(response.data.message);
+        	clearRole(); 
+        	window.location.href = '/';
     	})
     	.catch(error => {
         	console.error('Logout error:', error.response?.data || error.message);
@@ -53,7 +44,41 @@ const ClientEditProfile = () => {
     	});
 	};
 
-	const HandleNameChange = (e) => { setLocalClientName(e.target.value); };
+	const [username, setUsername] = useState(authData?.clientData.clientName || "");
+    const [successMessage, setSuccessMessage] = useState(null);
+    const [error, setError] = useState(null);
+
+    const updateCustomerProfile = async (e) => {
+		e.preventDefault();
+        setError(null);
+        setSuccessMessage(null);
+
+        if (!username) {
+            setError('Username is required');
+            return;
+        }
+
+        try {
+            const response = await axios.post(`${BACK_END_BASE_URL}/dashboard/customer/${authData.clientData.clientID}/profile`, { username }, {
+				withCredentials: true,
+				headers: {'Content-Type': 'application/json'}
+			});
+            setSuccessMessage(response.data.message); // Show success message
+        } catch (err) {
+            if (err.response) {
+                // Server responded with a status code outside the 2xx range
+                setError(err.response.data.message || 'An error occurred while updating the profile.');
+            } else if (err.request) {
+                // No response was received
+                setError('No response from the server. Please try again later.');
+            } else {
+                // Request setup triggered an error
+                setError('Request error: ' + err.message);
+            }
+        }
+    };
+
+	const HandleNameChange = (e) => { setUsername(e.target.value); };
 
 	const HandleKeyDown = (e) => {
 		if (e.key === "Enter") {
@@ -61,190 +86,86 @@ const ClientEditProfile = () => {
 		}
 	};
 
-	const HandleFormSubmit = (e) => {
-		e.preventDefault();
-		console.log(localClientName);
-	};
-
 	return (
-		<div
-			className="container-fluid d-flex flex-column pd-0"
-			style={{ backgroundColor: "#01040F" }}
-		>
-			<form onSubmit={HandleFormSubmit}>
-				{/* Header Section */}
-				<div
-					className="container-fluid"
-					style={{
-						height: "14%",
-						backgroundColor: "#01040F",
-					}}
-				>
+		<div className="container-fluid d-flex flex-column pd-0" style={{ backgroundColor: "#01040F" }}>
+			<form onSubmit={updateCustomerProfile}>
+				<div className="container-fluid" style={{ height: "14%", backgroundColor: "#01040F" }}>
 					<div className="row">
-						<i
-							className="text-white col-3 align-self-center mt-3 ms-0 ps-0"
-							onClick={HandleBackBtn}
-						>
-							{LEFT_ARROW}
-						</i>
+						<i className="text-white col-3 align-self-center mt-3 ms-0 ps-0" onClick={HandleBackBtn}>{LEFT_ARROW}</i>
 					</div>
 					<div className="text-white col-12 align-self-center h3 row">
 						<div className="d-flex justify-content-center mb-2">Personal</div>
-						<div className="d-flex justify-content-center mb-2">
-							Information
-						</div>
+						<div className="d-flex justify-content-center mb-2">Information</div>
 					</div>
 				</div>
 
-				{/* Profile Section */}
 				<div
-					className="row"
-					style={{ height: "15rem", backgroundColor: "#191A1F" }}
-				>
+					className="row" style={{ height: "15rem", backgroundColor: "#191A1F" }}>
 					<div className="col-12 d-flex flex-column justify-content-center align-items-center">
 						<div className="position-relative">
-							<img
-								className="img-fluid"
-								src="src/assets/userPicture.png"
-								alt="userPicture"
-								style={{ width: "170px" }}
-							/>
+							<img className="img-fluid" src="src/assets/userPicture.png" alt="userPicture" style={{ width: "170px" }}/>
 							<i className="position-absolute bottom-0 end-0">{CAMERA}</i>
 						</div>
 					</div>
 				</div>
 
-				{/* Content */}
-				<div
-					className="container-fluid d-flex flex-column align-items-center justify-content-center mt-4"
-					style={{ backgroundColor: "#01040F" }}
-				>
-					{/* Card 1 */}
+				<div className="container-fluid d-flex flex-column align-items-center justify-content-center mt-4" style={{ backgroundColor: "#01040F" }}>
 					<div className="row text-white mb-3 w-75">
-						<div
-							className={`col-12 d-flex align-items-center p-2 ${style.cardBorder}`}
-							onClick={() => setIsEditing(true)}
-						>
-							<img
-								className="me-3"
-								src="src/assets/humanIcon.png"
-								alt="human-icon"
-								style={{ width: "40px" }}
-							/>
+						<div className={`col-12 d-flex align-items-center p-2 ${style.cardBorder}`} onClick={() => setIsEditing(true)}>
+							<img className="me-3" src="src/assets/humanIcon.png" alt="human-icon" style={{ width: "40px" }}/>
 							{isEditing ? (
-								<input
+								<input 
 									type="text"
-									value={localClientName}
-									onChange={HandleNameChange}
-									onKeyDown={HandleKeyDown}
-									onBlur={() => setIsEditing(false)} // Exit edit mode on blur
-									autoFocus
-									style={{
-										background: "transparent",
-										border: "none",
-										color: "white",
-										outline: "none",
-									}}
-								/>
-							) : (
-								<span>{localClientName}</span>
-							)}
+									value={username} 
+									onChange={HandleNameChange} 
+									onKeyDown={HandleKeyDown} 
+									onBlur={() => setIsEditing(false)} 
+									autoFocus style={{ background: "transparent", border: "none", color: "white", outline: "none" }}
+								/>) : (<span>{username}</span>)}
 						</div>
 					</div>
 
-					{/* Card 2 */}
 					<div className="row text-white my-2 w-75">
-						<div
-							className={`col-12 d-flex align-items-center p-2 ${style.cardBorder}`}
-						>
-							<img
-								className="me-3"
-								src="src/assets/callingIcon.png"
-								alt="calling-icon"
-								style={{ width: "40px" }}
-							/>
+						<div className={`col-12 d-flex align-items-center p-2 ${style.cardBorder}`}>
+							<img className="me-3" src="src/assets/callingIcon.png" alt="calling-icon" style={{ width: "40px" }}/>
 							<span>086-377-1558</span>
 						</div>
 					</div>
 
-					{/* Card 3 */}
 					<div className="row text-white my-2 w-75">
-						<div
-							className={`col-12 d-flex align-items-center p-2 ${style.cardBorder}`}
-						>
-							<img
-								className="me-3"
-								src="src/assets/emailIcon.png"
-								alt="email-icon"
-								style={{ width: "40px" }}
-							/>
+						<div className={`col-12 d-flex align-items-center p-2 ${style.cardBorder}`}>
+							<img className="me-3" src="src/assets/emailIcon.png" alt="email-icon" style={{ width: "40px" }}/>
 							<span>david.beck@gmail.com</span>
 						</div>
 					</div>
 
-					{/* Card 4 */}
 					<div className="row text-white my-2 w-75">
 						<div
-							className={`col-12 d-flex align-items-center p-2 ${style.cardBorder}`}
-						>
-							<img
-								className="me-3"
-								src="src/assets/sexIcon.png"
-								alt="sex-icon"
-								style={{ width: "40px" }}
-							/>
+							className={`col-12 d-flex align-items-center p-2 ${style.cardBorder}`}>
+							<img className="me-3" src="src/assets/sexIcon.png" alt="sex-icon" style={{ width: "40px" }}/>
 							<span>Male</span>
 						</div>
 					</div>
 
-					{/* Card 5 */}
 					<div className="row text-white my-2 w-75">
-						<div
-							className={`col-12 d-flex align-items-center p-2 ${style.cardBorder}`}
-						>
-							<img
-								className="me-3"
-								src="src/assets/mapIcon.png"
-								alt="map-icon"
-								style={{ width: "40px" }}
-							/>
+						<div className={`col-12 d-flex align-items-center p-2 ${style.cardBorder}`}>
+							<img className="me-3" src="src/assets/mapIcon.png" alt="map-icon" style={{ width: "40px" }}/>
 							<span>England, London</span>
 						</div>
 					</div>
-					{/* buttom submit */}
+
 					<div className="row mb-3 d-flex mt-3 justify-content-center">
 						<div className="col-12 d-flex justify-content-center">
 							<button type="submit" className="btn">
-								<h4
-									className="text-white border-0 p-3"
-									style={{
-										width: "22rem",
-										backgroundColor: "#2B964F",
-										borderRadius: "20px",
-									}}
-								>
-									Finished
-								</h4>
+								<h4 className="text-white border-0 p-3" style={{ width: "22rem", backgroundColor: "#2B964F",borderRadius: "20px" }}>Finished</h4>
 							</button>
 						</div>
 					</div>
 
-					{/* Logout */}
 					<div className="row mb-5 d-flex justify-content-center">
 						<div className="col-12">
 							<button type="submit" className="btn w-50">
-								<h4
-									className="text-white"
-									onClick={HandleLogout}
-									style={{
-										width: "22rem",
-										backgroundColor: "#660000",
-										borderRadius: "20px",
-										padding: "15px"
-									}}
-								>
-									Logout
-								</h4>
+								<h4 className="text-white" onClick={HandleLogout} style={{ width: "22rem", backgroundColor: "#660000", borderRadius: "20px", padding: "15px" }}>Logout</h4>
 							</button>
 						</div>
 					</div>

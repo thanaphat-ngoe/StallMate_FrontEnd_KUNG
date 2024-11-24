@@ -9,7 +9,7 @@ const ClientPrivateRoute = () => {
     const { getRole } = useCookieAuth();
     const role = getRole(); 
     const BACK_END_BASE_URL = import.meta.env.VITE_API_BACK_END_BASE_URL;
-    const [isAuthenticated, setIsAuthenticated] = useState(null);
+    const [ isAuthenticated, setIsAuthenticated ] = useState(null);
     const { setAuthData } = useClientAuth();
     const location = useLocation();
 

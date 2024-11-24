@@ -5,12 +5,13 @@ import { useCookieAuth } from "../hooks/useCookieAuth";
 import axios from 'axios';
 import Loading from "../Loading";
 
+const BACK_END_BASE_URL = import.meta.env.VITE_API_BACK_END_BASE_URL;
+
 const OwnerPrivateRoute = () => {
     const { getRole } = useCookieAuth();
-    const role = getRole(); 
-    const BACK_END_BASE_URL = import.meta.env.VITE_API_BACK_END_BASE_URL;
-    const [isAuthenticated, setIsAuthenticated] = useState(null);
     const { setAuthData } = useOwnerAuth();
+    const [ isAuthenticated, setIsAuthenticated ] = useState(null);
+    const role = getRole(); 
     const location = useLocation();
 
     useEffect(() => {
