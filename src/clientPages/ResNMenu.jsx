@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useLocation } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
+import { useClientAuth } from '../utilities/ClientAuthContext';
 import Header from "../clientComponents/Header";
 import CartItem from '../clientComponents/CartItem';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -33,6 +34,7 @@ const ResNMenu = () => {
 	const [selectedCat, setSelectedCat] = useState("All");
 	const [infoVisible, setInfoVisible] = useState(false);
 	const [isFav, setIsFav] = useState(false);
+	const { authData } = useClientAuth();
 
 	const location = useLocation();
 
@@ -284,7 +286,7 @@ const ResNMenu = () => {
 												</Dropdown.Menu>
 											</Dropdown>
 											<div className='col-12 d-flex align-items-center justify-content-between' style={{marginTop:"2vw"}}>
-												<FavoriteIcon stallownerID={ownerID}/>
+												<FavoriteIcon customerID={authData.clientData.clientID} stallownerID={ownerID}/>
 												<span className='d-flex align-items-center justify-content-end'>
 													<img src={info} alt="" style={{width:"7.5vw", marginRight:"2vw"}} onClick={() => setInfoVisible(!infoVisible)}/>
 												</span>
