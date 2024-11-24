@@ -13,8 +13,8 @@ const API_ENDPOINTS = {
 
 const RootProtectedRoute = ({ children }) => {
 	const { getRole } = useCookieAuth();
-	const [isAuthenticated, setIsAuthenticated] = useState(null); 
-	const [redirectPath, setRedirectPath] = useState(null); 
+	const [ isAuthenticated, setIsAuthenticated ] = useState(null); 
+	const [ redirectPath, setRedirectPath ] = useState(null); 
 
 	useEffect(() => {
 		const checkAuth = async () => {
