@@ -113,6 +113,12 @@ const OwnerProfile = () => {
 		console.log("wallet");
 	};
 
+	const handleHistory = () => {
+		navigate("/ownerHistory")
+	}
+	const handleHistory = () => {
+		navigate("/ownerHistory")
+	}
 	
 	const [profilePresence, setProfilePresence] = useState(true);
 

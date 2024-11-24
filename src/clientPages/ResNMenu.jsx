@@ -22,6 +22,7 @@ import FavoriteIcon from '../clientComponents/FavoriteIcon'
 
 
 const ResNMenu = () => {
+	const BACK_END_BASE_URL = import.meta.env.VITE_API_BACK_END_BASE_URL;
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const [selectedItem, setSelectedItem] = useState(null);
@@ -43,7 +44,7 @@ const ResNMenu = () => {
 	useEffect(() => {
         const checkAuth = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/dashboard/stallowner/${ownerID.ownerID}/menu`, { withCredentials: true });
+                const response = await axios.get(`${BACK_END_BASE_URL}/dashboard/stallowner/${ownerID.ownerID}/menu`, { withCredentials: true });
                 if (response.status === 200) {
                     setRestaurants(response.data);
 					setLoading(false);
