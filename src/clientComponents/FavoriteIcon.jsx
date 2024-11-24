@@ -2,28 +2,18 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const FavoriteIcon = ({ customerID, stallownerID }) => {
+    const BACK_END_BASE_URL = import.meta.env.VITE_API_BACK_END_BASE_URL;
     const [isFav, setIsFav] = useState(false);
-    const [FavData, setFavData] = useState('');
-
+    
     useEffect(() => {
         const fetchFavoriteStatus = async () => {
             try {
-                const response = await axios.get(
-                    `http://localhost:3000/dashboard/customer/${customerID}/favorite`,
-                    { withCredentials: true }
-                );
+                const response = await axios.get(`${BACK_END_BASE_URL}/dashboard/customer/${customerID}/favorite`, { withCredentials: true });
                 console.log("Response Data:", response.data.favorites);
                 console.log("Stall Owner ID:", stallownerID);
-
                 const extractedStallOwnerID = typeof stallownerID === 'object' ? stallownerID.ownerID : stallownerID;
-
-                const favoriteStalls = response.data.favorites.filter(
-                    stall => stall.id === extractedStallOwnerID
-                );
-    
+                const favoriteStalls = response.data.favorites.filter(stall => stall.id === extractedStallOwnerID);
                 console.log("Filtered Favorites:", favoriteStalls);
-
-                setFavData(favoriteStalls);
                 if (favoriteStalls.length > 0) {
                     setIsFav(true);
                 }
@@ -38,28 +28,17 @@ const FavoriteIcon = ({ customerID, stallownerID }) => {
 
     const handleFav = async () => {
         try {
-
             const ownerID = stallownerID?.ownerID;
-    
             if (!ownerID) {
                 throw new Error("Invalid Stall Owner ID");
             }
-    
             console.log("Customer ID:", customerID); 
             console.log("Stall Owner ID:", ownerID); 
-    
             if (isFav) {
-                await axios.delete(
-                    `http://localhost:3000/dashboard/customer/${customerID}/favorite/${ownerID}`,
-                    { withCredentials: true }
-                );
+                await axios.delete(`${BACK_END_BASE_URL}/dashboard/customer/${customerID}/favorite/${ownerID}`, { withCredentials: true });
                 setIsFav(false);
             } else {
-                await axios.put(
-                    `http://localhost:3000/dashboard/customer/${customerID}/favorite/${ownerID}`,
-                    null,
-                    { withCredentials: true }
-                );
+                await axios.put(`${BACK_END_BASE_URL}/dashboard/customer/${customerID}/favorite/${ownerID}`, {}, { withCredentials: true });
                 setIsFav(true);
             }
         } catch (error) {
@@ -67,8 +46,6 @@ const FavoriteIcon = ({ customerID, stallownerID }) => {
             alert(error.response?.data?.error || "Failed to update favorites. Please try again.");
         }
     };
-    
-    
 
     return (
         <span
