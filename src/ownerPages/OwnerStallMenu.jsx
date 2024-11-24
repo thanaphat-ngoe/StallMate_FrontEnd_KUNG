@@ -161,6 +161,10 @@ const OwnerStallMenu = () => {
 					"address": "1234 Food Street",
 					"city": "Bangkok",
 					"state": "Bangkok"
+				},
+				"contact": {
+					"phone": "0000000000",
+					"email": "food@gmail.com",
 				}
 			}
 		];
@@ -176,6 +180,26 @@ const OwnerStallMenu = () => {
 			setLoading(false);
 		}, 300);
 	}, []);
+	/*useEffect(() => {
+        const checkAuth = async () => {
+            try {
+                const response = await axios.get(`http://localhost:3000/dashboard/stallowner/${ownerID.ownerID}/menu`, { withCredentials: true });
+                if (response.status === 200) {
+                    setRestaurants(response.data);
+					setLoading(false);
+					console.log(response.data);
+                } else {
+                    setRestaurants(null);
+					setLoading(true);
+                }
+				console.log(response.status);
+            } catch (error) {
+                setRestaurants(null);
+				setLoading(true);
+            }
+        };
+        checkAuth();
+    }, []);*/
 	if (loading) {
 		return <div className="text-center text white">Loading...</div>;
 	}
@@ -267,193 +291,67 @@ const OwnerStallMenu = () => {
 		document.getElementById('fileInputAdd').click();
 	};
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-
-		console.log("selectedRestaurant:", selectedRestaurant);
-
-
-		if (!selectedRestaurant || !selectedRestaurant.categories) {
-			console.error("selectedRestaurant or its categories are undefined.");
+		
+		if (!selectedMenu.imageUrl) {
+			alert('Please select an image file.');
 			return;
 		}
 
-		const updatedCategories = { ...selectedRestaurant.categories };
+		console.log(selectedMenu.imageUrl)
 
-		for (const category in updatedCategories) {
-			updatedCategories[category] = updatedCategories[category].map((item) =>
-				item._id === selectedMenu._id ? { ...selectedMenu } : item
-			);
-		}
+		const formData = new FormData();
+		formData.append('image', selectedMenu.imageUrl);
+		formData.append('name', selectedMenu.name);
+		formData.append('description', selectedMenu.description);
+		formData.append('price', selectedMenu.price);
+		formData.append('category', selectedMenu.category);
 
-		const updatedRestaurants = restaurants.map((restaurant) =>
-			restaurant.restaurant_name === selectedRestaurant.restaurant_name
-				? { ...restaurant, categories: updatedCategories }
-				: restaurant
-		);
-
-		const dataToSend = {
-			restaurant_id: selectedRestaurant.restaurant_id,
-			restaurant_name: selectedRestaurant.restaurant_name,
-			categories: updatedCategories,
-		};
-
-		fetch("https://jsonplaceholder.typicode.com/posts", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(dataToSend),
-		})
-			.then((response) => {
-				if (!response.ok) throw new Error("Failed to send data to the fake API");
-				return response.json();
-			})
-			.then((data) => {
-				console.log("Data sent to fake API:", dataToSend);
-				console.log("API Response:", data);
-
-				setRestaurants(updatedRestaurants);
-
-				const updatedSelectedRestaurant = updatedRestaurants.find(
-					(restaurant) =>
-						restaurant.restaurant_name === selectedRestaurant.restaurant_name
-				);
-				setSelectedRestaurant(updatedSelectedRestaurant);
-
-				setSelectedMenu(null);
-			})
-			.catch((error) => {
-				console.error("Error sending data to the fake API:", error);
-			});
-	};
-
-
-	const handleAddSubmit = async (e) => {
-		e.preventDefault();
-
-		if (!selectedAddMenu.imageUrl) {
-			alert("Please select an image for the menu item.");
-			return;
-		}
-
-		const dataToSend = {
-			name: selectedAddMenu.name,
-			price: selectedAddMenu.price,
-			description: selectedAddMenu.description,
-			category: selectedAddMenu.category,
-			imageUrl: selectedAddMenu.imageUrl,
-		};
+		console.log('BACK_END_BASE_URL:', BACK_END_BASE_URL);
+		console.log('authData?.ownerData.ownerID', authData?.ownerData.ownerID);
 
 		try {
-			const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(dataToSend),
-			});
-
-			if (!response.ok) throw new Error("Failed to send data to the fake API");
-
-			const data = await response.json();
-			console.log("Fake API Response:", data);
-
-			const newMenuItem = {
-				...dataToSend,
-				_id: data.id,
-				image: selectedAddMenu.imageUrl
-			};
-
-			setRestaurants(prevRestaurants => {
-				const updatedCategories = { ...selectedRestaurant.categories };
-				if (updatedCategories[newMenuItem.category]) {
-					updatedCategories[newMenuItem.category] = [
-						...updatedCategories[newMenuItem.category],
-						newMenuItem,
-					];
-				} else {
-					updatedCategories[newMenuItem.category] = [newMenuItem];
-				}
-
-				const updatedRestaurants = prevRestaurants.map((restaurant) =>
-					restaurant.restaurant_name === selectedRestaurant.restaurant_name
-						? {
-							...restaurant,
-							categories: updatedCategories,
-							images: restaurant.images
-								? [...restaurant.images, newMenuItem.image]
-								: [newMenuItem.image]
-						}
-						: restaurant
-				);
-
-				const updatedSelectedRestaurant = updatedRestaurants.find(
-					(restaurant) => restaurant.restaurant_name === selectedRestaurant.restaurant_name
-				);
-
-				setSelectedRestaurant(updatedSelectedRestaurant);
-
-				return updatedRestaurants;
-			});
-
-			setSelectedAddMenu({
-				imageUrl: null,
-				name: "",
-				description: "",
-				price: 0,
-				category: "",
-			});
-			setAddMenu(false);
+			const response = await axios.post(`${BACK_END_BASE_URL}/dashboard/stallowner/${authData?.ownerData.ownerID}/menu/${selectedMenu._id}`, 
+				formData, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } });
+				console.log('Menu created successfully:', response.data);
+				alert('Menu created successfully!');
 		} catch (error) {
-			console.error("Error submitting form:", error);
+			console.error('Error creating menu:', error.response?.data || error.message);
+			alert('Failed to create menu. Please check the details and try again.');
 		}
 	};
 
 
-	const handleResSubmit = (e) => {
+	const handleResSubmit = async (e) => {
 		e.preventDefault();
-
-		if (!selectedRestaurant || !selectedRestaurant.categories) {
-			console.error("selectedRestaurant or its categories are undefined.");
+		
+		if (!selectedRestaurant.restaurant_image) {
+			alert('Please select an image file.');
 			return;
 		}
 
+		console.log(selectedMenu.imageUrl)
 
-		const dataToSend = {
-			restaurant_id: selectedRestaurant.restaurant_id,
-			restaurant_name: selectedRestaurant.restaurant_name,
-			restaurant_image: selectedRestaurant.restaurant_image,
-			location: selectedRestaurant.location,
-			opening_hours: selectedRestaurant.opening_hours,
-		};
+		const formData = new FormData();
+		formData.append('restaurantPhoto', selectedRestaurant.restaurant_image);
+		formData.append('restaurantName', selectedRestaurant.restaurant_name);
+		formData.append('location', JSON.stringify(selectedRestaurant.location));
+		formData.append('openingHours', JSON.stringify(selectedRestaurant.opening_hours));
+		formData.append('contact', JSON.stringify(selectedRestaurant.contact));
 
+		console.log('BACK_END_BASE_URL:', BACK_END_BASE_URL);
+		console.log('authData?.ownerData.ownerID', authData?.ownerData.ownerID);
 
-		fetch('https://jsonplaceholder.typicode.com/posts', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(dataToSend),
-		})
-			.then(response => response.json())
-			.then(data => {
-				console.log("Data sent to fake API:", dataToSend);
-				console.log("API Response:", data);
-
-				const updatedRestaurants = restaurants.map((restaurant) =>
-					restaurant.restaurant_id === selectedRestaurant.restaurant_id
-						? { ...restaurant, ...selectedRestaurant }
-						: restaurant
-				);
-
-
-				setRestaurants(updatedRestaurants);
-				setIsResVisible(false);
-			})
-			.catch((error) => {
-				console.error("Error sending data to the fake API:", error);
-			});
+		try {
+			const response = await axios.post(`${BACK_END_BASE_URL}/dashboard/stallowner/${authData?.ownerData.ownerID}/menu/${selectedMenu._id}`, 
+				formData, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } });
+				console.log('Menu created successfully:', response.data);
+				alert('Menu created successfully!');
+		} catch (error) {
+			console.error('Error creating menu:', error.response?.data || error.message);
+			alert('Failed to create menu. Please check the details and try again.');
+		}
 	};
 
 	const handleResImageClick = () => {
@@ -471,16 +369,17 @@ const OwnerStallMenu = () => {
 	const handleResForm = (e) => {
 		const { name, value, dataset } = e.target;
 		const day = dataset.day;
-
+	
 		setSelectedRestaurant((prev) => {
-
+			
 			if (day) {
 				const updatedHours = prev.opening_hours.map((entry) =>
 					entry.weekday === day ? { ...entry, [name]: value } : entry
 				);
 				return { ...prev, opening_hours: updatedHours };
 			}
-
+	
+			
 			if (name === 'address' || name === 'city' || name === 'state') {
 				return {
 					...prev,
@@ -490,10 +389,23 @@ const OwnerStallMenu = () => {
 					}
 				};
 			}
-
+	
+		
+			if (name === 'phone' || name === 'email') {
+				return {
+					...prev,
+					contact: {
+						...prev.contact,
+						[name]: value
+					}
+				};
+			}
+	
+			
 			return { ...prev, [name]: value };
 		});
 	};
+	
 
 
 
@@ -769,6 +681,35 @@ const OwnerStallMenu = () => {
 											}}
 										/>
 									</div>
+									<div className="input-group d-flex justify-content-center align-items-center" style={{ marginBottom: "3vw" }}>
+										<span className='d-flex justify-content-center align-items-center' style={{ background: "#01040F", border: "none", height: "15vw", width: "15vw", marginTop: "-1vw", borderRadius: "2vw 0 0 2vw" }}>
+											<p className='text-white' style={{ fontSize: "3.5vw", margin: 0 }}>Phone</p>
+										</span>
+										<input
+											className='text-white'
+											type="text"
+											onChange={handleResForm}
+											name="phone"
+											value={selectedRestaurant.contact.phone || ""}
+											style={{ width: "75vw", height: "15vw", marginBottom: "1vw", background: "#01040F", border: "none", fontSize: "4vw", borderRadius: "0 2vw 2vw 0" }}
+										/>
+									</div>
+
+									<div className="input-group d-flex justify-content-center align-items-center" style={{ marginBottom: "3vw" }}>
+										<span className='d-flex justify-content-center align-items-center' style={{ background: "#01040F", border: "none", height: "15vw", width: "15vw", marginTop: "-1vw", borderRadius: "2vw 0 0 2vw" }}>
+											<p className='text-white' style={{ fontSize: "3.5vw", margin: 0 }}>Email</p>
+										</span>
+										<input
+											className='text-white'
+											type="email"
+											onChange={handleResForm}
+											name="email"
+											value={selectedRestaurant.contact.email || ""}
+											style={{ width: "75vw", height: "15vw", marginBottom: "1vw", background: "#01040F", border: "none", fontSize: "4vw", borderRadius: "0 2vw 2vw 0" }}
+										/>
+									</div>
+									<div style={{marginBottom:"20vw"}}></div>
+
 
 
 
