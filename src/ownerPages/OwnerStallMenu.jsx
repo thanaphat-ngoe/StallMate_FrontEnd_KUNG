@@ -70,7 +70,7 @@ const OwnerStallMenu = () => {
 
 	
 
-	/*useEffect(() => {
+	useEffect(() => {
 		const data = [
 			{
 				"restaurant_id": "12345",
@@ -161,6 +161,10 @@ const OwnerStallMenu = () => {
 					"address": "1234 Food Street",
 					"city": "Bangkok",
 					"state": "Bangkok"
+				},
+				"contact": {
+					"phone": "0000000000",
+					"email": "food@gmail.com",
 				}
 			}
 		];
@@ -175,8 +179,8 @@ const OwnerStallMenu = () => {
 			}
 			setLoading(false);
 		}, 300);
-	}, []);*/
-	useEffect(() => {
+	}, []);
+	/*useEffect(() => {
         const checkAuth = async () => {
             try {
                 const response = await axios.get(`http://localhost:3000/dashboard/stallowner/${ownerID.ownerID}/menu`, { withCredentials: true });
@@ -195,7 +199,7 @@ const OwnerStallMenu = () => {
             }
         };
         checkAuth();
-    }, []);
+    }, []);*/
 	if (loading) {
 		return <div className="text-center text white">Loading...</div>;
 	}
@@ -322,7 +326,7 @@ const OwnerStallMenu = () => {
 	const handleResSubmit = async (e) => {
 		e.preventDefault();
 		
-		if (!selectedMenu.imageUrl) {
+		if (!selectedRestaurant.restaurant_image) {
 			alert('Please select an image file.');
 			return;
 		}
@@ -330,11 +334,11 @@ const OwnerStallMenu = () => {
 		console.log(selectedMenu.imageUrl)
 
 		const formData = new FormData();
-		formData.append('image', selectedMenu.imageUrl);
-		formData.append('name', selectedMenu.name);
-		formData.append('description', selectedMenu.description);
-		formData.append('price', selectedMenu.price);
-		formData.append('category', selectedMenu.category);
+		formData.append('restaurantPhoto', selectedRestaurant.restaurant_image);
+		formData.append('restaurantName', selectedRestaurant.restaurant_name);
+		formData.append('location', JSON.stringify(selectedRestaurant.location));
+		formData.append('openingHours', JSON.stringify(selectedRestaurant.opening_hours));
+		formData.append('contact', JSON.stringify(selectedRestaurant.contact));
 
 		console.log('BACK_END_BASE_URL:', BACK_END_BASE_URL);
 		console.log('authData?.ownerData.ownerID', authData?.ownerData.ownerID);
@@ -365,16 +369,17 @@ const OwnerStallMenu = () => {
 	const handleResForm = (e) => {
 		const { name, value, dataset } = e.target;
 		const day = dataset.day;
-
+	
 		setSelectedRestaurant((prev) => {
-
+			
 			if (day) {
 				const updatedHours = prev.opening_hours.map((entry) =>
 					entry.weekday === day ? { ...entry, [name]: value } : entry
 				);
 				return { ...prev, opening_hours: updatedHours };
 			}
-
+	
+			
 			if (name === 'address' || name === 'city' || name === 'state') {
 				return {
 					...prev,
@@ -384,10 +389,23 @@ const OwnerStallMenu = () => {
 					}
 				};
 			}
-
+	
+		
+			if (name === 'phone' || name === 'email') {
+				return {
+					...prev,
+					contact: {
+						...prev.contact,
+						[name]: value
+					}
+				};
+			}
+	
+			
 			return { ...prev, [name]: value };
 		});
 	};
+	
 
 
 
@@ -663,6 +681,35 @@ const OwnerStallMenu = () => {
 											}}
 										/>
 									</div>
+									<div className="input-group d-flex justify-content-center align-items-center" style={{ marginBottom: "3vw" }}>
+										<span className='d-flex justify-content-center align-items-center' style={{ background: "#01040F", border: "none", height: "15vw", width: "15vw", marginTop: "-1vw", borderRadius: "2vw 0 0 2vw" }}>
+											<p className='text-white' style={{ fontSize: "3.5vw", margin: 0 }}>Phone</p>
+										</span>
+										<input
+											className='text-white'
+											type="text"
+											onChange={handleResForm}
+											name="phone"
+											value={selectedRestaurant.contact.phone || ""}
+											style={{ width: "75vw", height: "15vw", marginBottom: "1vw", background: "#01040F", border: "none", fontSize: "4vw", borderRadius: "0 2vw 2vw 0" }}
+										/>
+									</div>
+
+									<div className="input-group d-flex justify-content-center align-items-center" style={{ marginBottom: "3vw" }}>
+										<span className='d-flex justify-content-center align-items-center' style={{ background: "#01040F", border: "none", height: "15vw", width: "15vw", marginTop: "-1vw", borderRadius: "2vw 0 0 2vw" }}>
+											<p className='text-white' style={{ fontSize: "3.5vw", margin: 0 }}>Email</p>
+										</span>
+										<input
+											className='text-white'
+											type="email"
+											onChange={handleResForm}
+											name="email"
+											value={selectedRestaurant.contact.email || ""}
+											style={{ width: "75vw", height: "15vw", marginBottom: "1vw", background: "#01040F", border: "none", fontSize: "4vw", borderRadius: "0 2vw 2vw 0" }}
+										/>
+									</div>
+									<div style={{marginBottom:"20vw"}}></div>
+
 
 
 
