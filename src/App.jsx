@@ -20,7 +20,8 @@ import Loading from './Loading';
 import OwnerLogin from './ownerPages/OwnerLogin';
 import OwnerProfile from './ownerPages/OwnerProfile';
 import OwnerEditProfile from './ownerPages/OwnerEditProfile';
-import StallMenu from './ownerPages/StallMenu';
+import OwnerStallMenu from './ownerPages/OwnerStallMenu';
+import OwnerOrderQueue from './ownerPages/OwnerOrderQueue';
 
 {/* Utilities components */}
 import RootProtectedRoute from "./utilities/RootProtectedRoute";
@@ -33,9 +34,6 @@ import { OwnerAuthProvider } from './utilities/OwnerAuthContext';
 
 {/* Hooks components */}
 import { useCookieAuth } from "./hooks/useCookieAuth";
-import OwnerOrderQueue from './ownerPages/OwnerOrderQueue';
-
-import ClientTest from './clientPages/ClientTest';
 
 function App() {
 	const { setRole } = useCookieAuth();
@@ -58,8 +56,6 @@ function App() {
 				{/* Semi-Private route */}
         		<Route path="/clientLogin" element={ <ClientLogin/> }/>
 				<Route path="/ownerLogin" element={ <OwnerLogin/> }/>
-				
-				<Route path="/ClientTest" element={ <ClientTest/> }/>
 
 				{/* Client private route */}
 				<Route element={ <ClientAuthProvider> <ClientPrivateRoute/> </ClientAuthProvider> }>
@@ -73,10 +69,10 @@ function App() {
 				
 				{/* Owner private route */}
 				<Route element={ <OwnerAuthProvider> <OwnerPrivateRoute/> </OwnerAuthProvider> }>
-					<Route path="/ownerProfile" element={  <OwnerProfile/> }/>
-					<Route path="/ownerEditProfile" element={  <OwnerEditProfile/> }/>
-					{/* add new Rount na kung please recheck for nine t */}
-					<Route path="/ownerOrderQueue" element = {<OwnerOrderQueue />} />
+					<Route path="/ownerProfile" element={ <OwnerProfile/> }/>
+					<Route path="/ownerEditProfile" element={ <OwnerEditProfile/> }/>
+					<Route path="/ownerMenu" element={ <OwnerStallMenu/> }/>
+					<Route path="/ownerOrderQueue" element = { <OwnerOrderQueue />} />
         		</Route>
 
 

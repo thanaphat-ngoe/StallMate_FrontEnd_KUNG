@@ -16,6 +16,7 @@ import langIcon from '../assets/lang.png'
 import axios from 'axios';
 import info from '../assets/info.svg'
 import StallInfo from '../clientComponents/StallInfo'
+import FavoriteIcon from '../clientComponents/FavoriteIcon'
 
 
 
@@ -283,32 +284,7 @@ const ResNMenu = () => {
 												</Dropdown.Menu>
 											</Dropdown>
 											<div className='col-12 d-flex align-items-center justify-content-between' style={{marginTop:"2vw"}}>
-											<span 
-												className="d-flex align-items-center justify-content-start" 
-												onClick={handleFav}
-												>
-												<svg
-													fill={isFav ? "#B01E28" : "#FFFFFF"}
-													height="6vw"
-													width="6vw"
-													id="Layer_1"
-													xmlns="http://www.w3.org/2000/svg"
-													xmlnsXlink="http://www.w3.org/1999/xlink"
-													viewBox="0 0 455 455"
-													xmlSpace="preserve"
-													stroke="#FFFFFF"
-												>
-													<g id="SVGRepo_bgCarrier" strokeWidth={0} />
-													<g
-													id="SVGRepo_tracerCarrier"
-													strokeLinecap="round"
-													strokeLinejoin="round"
-													/>
-													<g id="SVGRepo_iconCarrier">
-													<path d="M326.632,10.346c-38.733,0-74.991,17.537-99.132,46.92c-24.141-29.383-60.399-46.92-99.132-46.92 C57.586,10.346,0,67.931,0,138.714c0,55.426,33.049,119.535,98.23,190.546c50.162,54.649,104.729,96.96,120.257,108.626l9.01,6.769 l9.009-6.768c15.53-11.667,70.099-53.979,120.26-108.625C421.95,258.251,455,194.141,455,138.714 C455,67.931,397.414,10.346,326.632,10.346z" />
-													</g>
-												</svg>
-												</span>
+												<FavoriteIcon stallownerID={ownerID}/>
 												<span className='d-flex align-items-center justify-content-end'>
 													<img src={info} alt="" style={{width:"7.5vw", marginRight:"2vw"}} onClick={() => setInfoVisible(!infoVisible)}/>
 												</span>
