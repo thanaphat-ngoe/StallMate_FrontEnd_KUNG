@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useOwnerAuth } from "../utilities/OwnerAuthContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import style from "./OwnerProfile.module.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PicturePlaceHolder from '../assets/picplace.svg'
+import axios from "axios";
 
 export const STAR_ICON = (
 	<svg
@@ -94,9 +95,11 @@ export const HISTORY_ICON = (
 );  
 
 const OwnerProfile = () => {
+	const BACK_END_BASE_URL = import.meta.env.VITE_API_BACK_END_BASE_URL;
   const { authData } = useOwnerAuth();
-  const [selectedDay, setSelectedDay] = useState("Monday");
+  const ownerID = authData.ownerData.ownerID;
   const navigate = useNavigate();
+  console.log(ownerID);
   const handleQueue = () => {
 
     navigate('/ownerOrderQueue') 
@@ -105,7 +108,7 @@ const OwnerProfile = () => {
 	const handleChangeName = () => { navigate("/ownerEditProfile"); };
 
 	const handleMenuEdit = () => {
-		navigate("/StallMenu");
+		navigate("/ownerMenu");
 	};
 	const handleOrderQueue = () => {
 		navigate("/ownerOrderQueue");
@@ -122,21 +125,53 @@ const OwnerProfile = () => {
 	const [profilePresence, setProfilePresence] = useState(true);
 
 	const [profile, setProfile] = useState({
-		StallOwnerID: "67286dca2df6852ad96840b5",
-		owner_profile: { full_name: "", profile_photo: "" },
-		restaurant: { name: "", photo: "" },
-		location: { address: "", city: "", state: "", },
-		opening_hours: [
+		fullName: "", 
+		bio: "", 
+		experienceYears: 0, 
+		profilePhoto: null, 
+		restaurantName: "", 
+		restaurantPhoto: null, 
+		location: {
+			address: "", 
+			city: "", 
+			state: "" 
+		},
+		openingHours: [
 			{ weekday: "Monday", open_time: "", close_time: "" },
 			{ weekday: "Tuesday", open_time: "", close_time: "" },
 			{ weekday: "Wednesday", open_time: "", close_time: "" },
 			{ weekday: "Thursday", open_time: "", close_time: "" },
 			{ weekday: "Friday", open_time: "", close_time: "" },
 			{ weekday: "Saturday", open_time: "", close_time: "" },
-			{ weekday: "Sunday", open_time: "", close_time: "" },
+			{ weekday: "Sunday", open_time: "", close_time: "" }
 		],
-		contact: { email: "", phone: "", }
+		contact: {
+			email: "", // Contact email
+			phone: "" // Contact phone number
+		}
 	});
+	const [selectedDay, setSelectedDay] = useState(profile.openingHours[0]?.weekday || "Monday");
+
+	/*useEffect(() => {
+        const checkAuth = async () => {
+            try {
+                const response = await axios.get(`http://localhost:3000/dashboard/stallowner/${ownerID}/profile`, { withCredentials: true });
+                if (response.status === 200) {
+                    setProfile(response.data);
+					setProfilePresence(true);
+					setLoading(false);
+					console.log(response.data);
+                } else {
+					setProfilePresence(false);
+                }
+				console.log(response.status);
+            } catch (error) {
+                console.log(error)
+				setProfilePresence(false);
+            }
+        };
+        checkAuth();
+    }, []);*/
 
 	const handleNestedInputChange = (event, section) => {
 		const { name, value } = event.target;
@@ -148,112 +183,194 @@ const OwnerProfile = () => {
 			},
 		}));
 	};
-
-	const handleOpeningHoursChange = (event) => {
-		const { name, value } = event.target;
-
+	const handleInputChange = (e) => {
+		const { name, value } = e.target;
+	  
 		setProfile((prevProfile) => ({
-			...prevProfile,
-			opening_hours: prevProfile.opening_hours.map((entry) =>
-				entry.weekday === selectedDay
-					? { ...entry, [name]: value }
-					: entry
-			)
+		  ...prevProfile,
+		  [name]: value,
 		}));
-
+	  };
+	  
+	
+	const handleOpeningHoursChange = (event, selectedDay) => {
+		const { name, value } = event.target;
+	
+		setProfile((prevProfile) => {
+			const updatedOpeningHours = prevProfile.openingHours.map((entry) => {
+				if (entry.weekday === selectedDay) {
+					return { ...entry, [name]: value };
+				}
+				return entry;
+			});
+	
+			return {
+				...prevProfile,
+				openingHours: updatedOpeningHours,
+			};
+		});
+	
 		console.log("Updated time for", selectedDay, name, value);
 	};
+	
 
-	const handleSubmit = (event) => {
-		event.preventDefault();
-		console.log("Form submitted:", profile);
+	
+	
+	
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+
+		if (!profile.fullName || !profile.profilePhoto) {
+			alert('Please fill in all the profile details.');
+			return;
+		}
+
+		console.log(profile);
+
+		const formData = new FormData();
+
+		// Basic Profile Details
+		formData.append('fullName', profile.fullName);
+		formData.append('bio', profile.bio);
+		formData.append('experienceYears', profile.experienceYears);
+
+		// Add Profile Photo File
+		if (profile.profilePhoto instanceof File) {
+			formData.append('profilePhoto', profile.profilePhoto);
+		}
+
+		// Restaurant Details
+		formData.append('restaurantName', profile.restaurantName);
+
+		// Add Restaurant Photo File
+		if (profile.restaurantPhoto instanceof File) {
+			formData.append('restaurantPhoto', profile.restaurantPhoto);
+		}
+
+		// Location
+		formData.append(
+			'location',
+			JSON.stringify({
+				address: profile.location.address,
+				city: profile.location.city,
+				state: profile.location.state,
+			})
+		);
+
+		// Opening Hours
+		formData.append('openingHours', 
+			JSON.stringify(profile.openingHours.map((day) => ({
+				weekday: day.weekday,
+				open_time: day.open_time,
+				close_time: day.close_time,
+			})))
+		);
+
+		// Contact Info
+		formData.append(
+			'contact',
+			JSON.stringify({
+				email: profile.contact.email,
+				phone: profile.contact.phone,
+			})
+		);
+
+		console.log('FormData contents:');
+		for (let pair of formData.entries()) {
+			console.log(pair[0] + ': ' + pair[1]);
+		}
 
 		try {
-			alert("Form submitted successfully!");
+			const response = await axios.put(
+				`${BACK_END_BASE_URL}/dashboard/stallowner/${ownerID}/profile`, 
+				formData, 
+				{ 
+					withCredentials: true, 
+					headers: { 'Content-Type': 'multipart/form-data' } 
+				}
+			);
+			console.log('Profile updated successfully:', response.data);
+			alert('Profile updated successfully!');
+		
 			setProfile({
-				StallOwnerID: "67286dca2df6852ad96840b5",
-				owner_profile: {
-					full_name: "",
-					profile_photo: "",
-				},
-				restaurant: {
-					name: "",
-					photo: "",
-				},
+				fullName: "", 
+				bio: "", 
+				experienceYears: 0, 
+				profilePhoto: null, 
+				restaurantName: "", 
+				restaurantPhoto: null, 
 				location: {
-					address: "",
-					city: "",
-					state: "",
+					address: "", 
+					city: "", 
+					state: "" 
 				},
-				opening_hours: [
+				openingHours: [
 					{ weekday: "Monday", open_time: "", close_time: "" },
 					{ weekday: "Tuesday", open_time: "", close_time: "" },
 					{ weekday: "Wednesday", open_time: "", close_time: "" },
 					{ weekday: "Thursday", open_time: "", close_time: "" },
 					{ weekday: "Friday", open_time: "", close_time: "" },
 					{ weekday: "Saturday", open_time: "", close_time: "" },
-					{ weekday: "Sunday", open_time: "", close_time: "" },
+					{ weekday: "Sunday", open_time: "", close_time: "" }
 				],
 				contact: {
-					email: "",
-					phone: "",
-				},
+					email: "", 
+					phone: "" 
+				}
 			});
-			setProfilePresence(true);
 		} catch (error) {
-			console.error("Error submitting form:", error);
-			alert("Error submitting form");
+			console.error('Error updating profile:', error);
+			console.error('Error response:', error.response?.data);
+			console.error('Error status:', error.response?.status);
+			alert(`Failed to update profile: ${error.response?.data?.error || error.message}`);
 		}
-	};
+};
+	
 
-	const handleAddResImageClick = (target) => {
+	const handleAddResImageClick = () => {
 		document.getElementById('fileInputAddRes').click();
 	};
-	const handleAddProImageClick = (target) => {
+	
+	const handleAddProImageClick = () => {
 		document.getElementById('fileInputAddPro').click();
 	};
-
+	
 	const handleAddResFileChange = (e) => {
 		try {
 			const file = e.target.files[0];
 			if (file) {
-				const fileUrl = URL.createObjectURL(file);
-
-				setProfile(prevProfile => ({
+				setProfile((prevProfile) => ({
 					...prevProfile,
-					restaurant: {
-						...prevProfile.restaurant,
-						photo: fileUrl
-					}
+					restaurantPhoto: file, 
 				}));
 			}
 		} catch (error) {
 			console.error('Error creating file URL:', error);
 		}
 	};
+	
 	const handleAddProFileChange = (e) => {
 		try {
 			const file = e.target.files[0];
 			if (file) {
-				const fileUrl = URL.createObjectURL(file);
-
-				setProfile(prevProfile => ({
+				setProfile((prevProfile) => ({
 					...prevProfile,
-					owner_profile: {
-						...prevProfile.owner_profile,
-						profile_photo: fileUrl
-					}
+					profilePhoto: file,
 				}));
 			}
 		} catch (error) {
 			console.error('Error creating file URL:', error);
 		}
 	};
+	
 
 	const handleDayChange = (e) => {
-		console.log("Selected day changing to:", e.target.value);
-		setSelectedDay(e.target.value);
+		const newDay = e.target.value;
+		console.log("Selected day changing to:", newDay);
+		setSelectedDay(newDay); 
 	};
+	
 
 	return (
 		profilePresence ? (
@@ -424,7 +541,7 @@ const OwnerProfile = () => {
 						onSubmit={handleSubmit}
 						className="d-flex flex-column justify-content-center align-items-center"
 						style={{ position: "relative", width: "100vw" }}
-					>
+						>
 						{/* Owner Profile */}
 						<h4 className="text-white" style={{ marginBottom: "4vw", fontSize: "5vw" }}>
 							Owner Profile
@@ -433,53 +550,94 @@ const OwnerProfile = () => {
 						{/* Image Upload */}
 						<div
 							style={{
-								position: "relative",
-								display: "flex",
-								justifyContent: "center",
-								marginBottom: "3vw",
+							position: "relative",
+							display: "flex",
+							justifyContent: "center",
+							marginBottom: "3vw",
 							}}
 						>
 							<img
-								src={profile.owner_profile.profile_photo || PicturePlaceHolder}
-								alt="Owner Profile"
-								style={{
-									width: "20vw",
-									borderRadius: "10%",
-									cursor: "pointer",
-									color: 'white'
-								}}
-								onClick={() => handleAddProImageClick("owner_profile.profile_photo")}
+							src={profile.profilePhoto || PicturePlaceHolder}
+							alt="Owner Profile"
+							style={{
+								width: "20vw",
+								borderRadius: "10%",
+								cursor: "pointer",
+							}}
+							onClick={handleAddProImageClick}
 							/>
 							<input
-								id="fileInputAddPro"
-								type="file"
-								accept="image/*"
-								style={{
-									display: "none",
-								}}
-								onChange={handleAddProFileChange}
+							id="fileInputAddPro"
+							type="file"
+							accept="image/*"
+							style={{ display: "none" }}
+							onChange={handleAddProFileChange}
 							/>
 						</div>
 
 						{/* Full Name */}
 						<div className="input-group d-flex justify-content-center align-items-center" style={{ marginBottom: "3vw" }}>
 							<input
-								type="text"
-								name="full_name"
-								placeholder="Full Name"
-								value={profile.owner_profile.full_name}
-								onChange={(event) => handleNestedInputChange(event, 'owner_profile')}
-								required
-								style={{
-									width: "90vw",
-									height: "12vw",
-									background: "#01040F",
-									border: "none",
-									color: "white",
-									fontSize: "4vw",
-									borderRadius: "2vw",
-									padding: "1vw",
-								}}
+							type="text"
+							name="fullName"
+							placeholder="Full Name"
+							value={profile.fullName}
+							onChange={handleInputChange}
+							required
+							style={{
+								width: "90vw",
+								height: "12vw",
+								background: "#01040F",
+								border: "none",
+								color: "white",
+								fontSize: "4vw",
+								borderRadius: "2vw",
+								padding: "1vw",
+							}}
+							/>
+						</div>
+
+						{/* Bio */}
+						<div className="input-group d-flex justify-content-center align-items-center" style={{ marginBottom: "3vw" }}>
+							<input
+							type="text"
+							name="bio"
+							placeholder="Bio"
+							value={profile.bio}
+							onChange={handleInputChange}
+							required
+							style={{
+								width: "90vw",
+								height: "12vw",
+								background: "#01040F",
+								border: "none",
+								color: "white",
+								fontSize: "4vw",
+								borderRadius: "2vw",
+								padding: "1vw",
+							}}
+							/>
+						</div>
+
+						{/* Experience Years */}
+						<div className="input-group d-flex justify-content-center align-items-center" style={{ marginBottom: "3vw" }}>
+							<input
+							type="number"
+							name="experienceYears"
+							placeholder="Experience Years"
+							value={profile.experienceYears}
+							onChange={handleInputChange}
+							required
+							style={{
+								width: "90vw",
+								height: "12vw",
+								background: "#01040F",
+								border: "none",
+								color: "white",
+								fontSize: "4vw",
+								borderRadius: "2vw",
+								padding: "1vw",
+							}}
 							/>
 						</div>
 
@@ -487,53 +645,54 @@ const OwnerProfile = () => {
 						<h4 className="text-white" style={{ marginBottom: "4vw", fontSize: "5vw" }}>
 							Restaurant Details
 						</h4>
+
+						{/* Restaurant Photo */}
 						<div
 							style={{
-								position: "relative",
-								display: "flex",
-								justifyContent: "center",
-								marginBottom: "3vw",
+							position: "relative",
+							display: "flex",
+							justifyContent: "center",
+							marginBottom: "3vw",
 							}}
 						>
 							<img
-								src={profile.restaurant.photo || PicturePlaceHolder}
-								alt="Owner Profile"
-								style={{
-									width: "20vw",
-									borderRadius: "10%",
-									cursor: "pointer",
-									color: 'white'
-								}}
-								onClick={() => handleAddResImageClick("restaurant.photo")}
+							src={profile.restaurantPhoto || PicturePlaceHolder}
+							alt="Restaurant"
+							style={{
+								width: "20vw",
+								borderRadius: "10%",
+								cursor: "pointer",
+							}}
+							onClick={handleAddResImageClick}
 							/>
 							<input
-								id="fileInputAddRes"
-								type="file"
-								accept="image/*"
-								style={{
-									display: "none",
-								}}
-								onChange={handleAddResFileChange}
+							id="fileInputAddRes"
+							type="file"
+							accept="image/*"
+							style={{ display: "none" }}
+							onChange={handleAddResFileChange}
 							/>
 						</div>
+
+						{/* Restaurant Name */}
 						<div className="input-group d-flex justify-content-center align-items-center" style={{ marginBottom: "3vw" }}>
 							<input
-								type="text"
-								name="name"
-								placeholder="Restaurant Name"
-								value={profile.restaurant.name}
-								onChange={(event) => handleNestedInputChange(event, 'restaurant')}
-								required
-								style={{
-									width: "90vw",
-									height: "12vw",
-									background: "#01040F",
-									border: "none",
-									color: "white",
-									fontSize: "4vw",
-									borderRadius: "2vw",
-									padding: "1vw",
-								}}
+							type="text"
+							name="restaurantName"
+							placeholder="Restaurant Name"
+							value={profile.restaurantName}
+							onChange={handleInputChange}
+							required
+							style={{
+								width: "90vw",
+								height: "12vw",
+								background: "#01040F",
+								border: "none",
+								color: "white",
+								fontSize: "4vw",
+								borderRadius: "2vw",
+								padding: "1vw",
+							}}
 							/>
 						</div>
 
@@ -543,23 +702,24 @@ const OwnerProfile = () => {
 						</h4>
 						{["address", "city", "state"].map((field, index) => (
 							<div className="input-group d-flex justify-content-center align-items-center" style={{ marginBottom: "3vw" }} key={index}>
-								<input
-									type="text"
-									name={field}
-									placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-									required
-									style={{
-										width: "90vw",
-										height: "12vw",
-										background: "#01040F",
-										border: "none",
-										color: "white",
-										fontSize: "4vw",
-										borderRadius: "2vw",
-										padding: "1vw",
-									}}
-									onChange={(event) => handleNestedInputChange(event, 'location')}
-								/>
+							<input
+								type="text"
+								name={field}
+								placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+								value={profile.location[field]}
+								onChange={(event) => handleNestedInputChange(event, "location")}
+								required
+								style={{
+								width: "90vw",
+								height: "12vw",
+								background: "#01040F",
+								border: "none",
+								color: "white",
+								fontSize: "4vw",
+								borderRadius: "2vw",
+								padding: "1vw",
+								}}
+							/>
 							</div>
 						))}
 
@@ -597,7 +757,7 @@ const OwnerProfile = () => {
 									borderRadius: "0 2vw 2vw 0",
 								}}
 							>
-								{profile.opening_hours.map((entry) => (
+								{profile.openingHours.map((entry) => (
 									<option key={entry.weekday} value={entry.weekday}>
 										{entry.weekday}
 									</option>
@@ -607,90 +767,90 @@ const OwnerProfile = () => {
 
 						{/* Time Inputs */}
 						{["open_time", "close_time"].map((timeField, index) => (
-							<div key={index} className="input-group d-flex justify-content-center align-items-center" style={{ marginBottom: "3vw" }}>
-								<span
-									className="d-flex justify-content-center align-items-center"
-									style={{
-										background: "#01040F",
-										border: "none",
-										height: "15vw",
-										width: "15vw",
-										marginTop: "-1vw",
-										borderRadius: "2vw 0 0 2vw",
-									}}
-								>
-									<p className="text-white" style={{ fontSize: "3.5vw", margin: 0 }}>
-										{timeField === "open_time" ? "Open" : "Close"}
-									</p>
-								</span>
-								<input
-									className="text-white"
-									type="time"
-									name={timeField}
-									value={profile.opening_hours.find(
-										(entry) => entry.weekday === selectedDay
-									)?.[timeField] || ""}
-									onChange={handleOpeningHoursChange}
-									style={{
-										width: "75vw",
-										height: "15vw",
-										marginBottom: "1vw",
-										background: "#01040F",
-										border: "none",
-										fontSize: "4vw",
-										borderRadius: "0 2vw 2vw 0",
-									}}
-								/>
-							</div>
+						<div key={index} className="input-group d-flex justify-content-center align-items-center" style={{ marginBottom: "3vw" }}>
+							<span
+							className="d-flex justify-content-center align-items-center"
+							style={{
+								background: "#01040F",
+								border: "none",
+								height: "15vw",
+								width: "15vw",
+								marginTop: "-1vw",
+								borderRadius: "2vw 0 0 2vw",
+							}}
+							>
+							<p className="text-white" style={{ fontSize: "3.5vw", margin: 0 }}>
+								{timeField === "open_time" ? "Open" : "Close"}
+							</p>
+							</span>
+							<input
+							className="text-white"
+							type="time"
+							name={timeField}
+							value={profile.openingHours.find(
+								(entry) => entry.weekday === selectedDay
+							)?.[timeField] || ""}
+							onChange={(event) => handleOpeningHoursChange(event, selectedDay)}
+							style={{
+								width: "75vw",
+								height: "15vw",
+								marginBottom: "1vw",
+								background: "#01040F",
+								border: "none",
+								fontSize: "4vw",
+								borderRadius: "0 2vw 2vw 0",
+							}}
+							/>
+						</div>
 						))}
 
-						{/* Contact Information */}
+
+						{/* Contact */}
 						<h4 className="text-white" style={{ marginBottom: "4vw", fontSize: "5vw" }}>
 							Contact Information
 						</h4>
 						{["email", "phone"].map((field, index) => (
-							<div className="input-group d-flex justify-content-center align-items-center mb-3" key={index}>
-								<input
-									type={field === "email" ? "email" : "text"}
-									name={field}
-									placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-									required
-									onChange={(event) => handleNestedInputChange(event, 'contact')}
-									style={{
-										width: "90vw",
-										height: "12vw",
-										background: "#01040F",
-										border: "none",
-										color: "white",
-										fontSize: "4vw",
-										borderRadius: "2vw",
-										padding: "1vw",
-									}}
-								/>
+							<div className="input-group d-flex justify-content-center align-items-center" style={{ marginBottom: "3vw" }} key={index}>
+							<input
+								type={field === "email" ? "email" : "text"}
+								name={field}
+								placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+								value={profile.contact[field]}
+								onChange={(event) => handleNestedInputChange(event, "contact")}
+								required
+								style={{
+								width: "90vw",
+								height: "12vw",
+								background: "#01040F",
+								border: "none",
+								color: "white",
+								fontSize: "4vw",
+								borderRadius: "2vw",
+								padding: "1vw",
+								}}
+							/>
 							</div>
 						))}
 
-
-						{/* Submit Button */}
-						<div
-							className="d-flex justify-content-center align-items-center mt-3 mb-5 "
-							style={{ height: "12vw" }}
+						<button
+							type="submit"
+							className="btn btn-primary"
+							style={{
+							background: "#016B3D",
+							fontSize: "4vw",
+							padding: "1vw",
+							width: "90vw",
+							height: "12vw",
+							borderRadius: "3vw",
+							marginTop: "3vw",
+							}}
 						>
-							<button
-								type="submit"
-								className="d-flex justify-content-center align-items-center text-white fs-5 fw-bold"
-								style={{
-									width: "95vw",
-									height: "100%",
-									background: "#2B964F",
-									fontSize: "3.5vw",
-									borderRadius: "4vw",
-								}}
-							>
-								Finished
-							</button>
-						</div>
-					</form>
+							Submit
+						</button>
+						</form>
+
+
+
 				</div>
 			</div>
 
