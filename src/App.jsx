@@ -79,7 +79,6 @@ function App() {
 					<Route path="/ownerOrderHistory" element = { <OwnerOrderHistory/> } />
         		</Route>
 
-
       		</Routes>
     	</Router>
   	);
