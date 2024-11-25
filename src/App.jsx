@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -15,14 +15,15 @@ import ClientWallet from './clientPages/ClientWallet';
 import ClientNavBar from './clientComponents/ClientNavBar';
 import ResNMenu from './clientPages/ResNMenu';
 import Loading from './Loading';
+import ClientFavourite from './clientPages/ClientFavourite';
 
 {/* Owner pages */}
 import OwnerLogin from './ownerPages/OwnerLogin';
-import OwnerProfile from './ownerPages/OwnerProfile';
+import OwnerStallProfile from './ownerPages/OwnerStallProfile';
 import OwnerEditProfile from './ownerPages/OwnerEditProfile';
 import OwnerStallMenu from './ownerPages/OwnerStallMenu';
-// import OwnerStallMenu from './ownerPages/OwnerStallMenu';
 import OwnerOrderQueue from './ownerPages/OwnerOrderQueue';
+import OwnerOrderHistory from './ownerPages/OwnerOrderHistory';
 
 {/* Utilities components */}
 import RootProtectedRoute from "./utilities/RootProtectedRoute";
@@ -64,16 +65,18 @@ function App() {
 					<Route path="/clientProfile" element={ <HomeWithNavbar component= { <ClientProfile/> }/> }/>
 					<Route path="/clientEditProfile" element={ <ClientEditProfile/> } />
 					<Route path="/clientWallet" element={ <HomeWithNavbar component= { <ClientWallet/> }/> }/>
+					<Route path="/clientFavourite" element={ <ClientFavourite/> }/>
 					<Route path="/requestMenu/:ownerID" element={ <ResNMenu/> }/>
 					<Route path="/checkingout" element={ <Loading/> }/>
         		</Route>
 				
 				{/* Owner private route */}
 				<Route element={ <OwnerAuthProvider> <OwnerPrivateRoute/> </OwnerAuthProvider> }>
-					<Route path="/ownerProfile" element={  <OwnerProfile/> }/>
+					<Route path="/ownerStallProfile" element={  <OwnerStallProfile/> }/>
 					<Route path="/ownerEditProfile" element={  <OwnerEditProfile/> }/>
-					<Route path="/ownerOrderQueue" element = { <OwnerOrderQueue />} />
-					<Route path="/ownerStallMenu" element = { <OwnerStallMenu />} />
+					<Route path="/ownerStallMenu" element = { <OwnerStallMenu/> } />
+					<Route path="/ownerOrderQueue" element = { <OwnerOrderQueue/> } />
+					<Route path="/ownerOrderHistory" element = { <OwnerOrderHistory/> } />
         		</Route>
 
       		</Routes>

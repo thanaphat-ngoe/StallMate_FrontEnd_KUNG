@@ -1,11 +1,8 @@
-// React & Router
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-// Context
 import { useClientAuth } from '../utilities/ClientAuthContext';
 
-// Assets
 import ProfileIMG from '../assets/profile.png';
 import BellIMG from '../assets/bell.png';
 import BurgerIMG from '../assets/burghome.png';
@@ -14,7 +11,6 @@ import GrillIMG from '../assets/grilledchic.png';
 import SaladIMG from '../assets/salad.png';
 import SiamIMG from '../assets/siam.png';
 
-// Styles
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ClientHome.css';
 
@@ -55,7 +51,7 @@ const ClientHome = () => {
 			</div>
 			<div className="container-fluid d-flex justify-content-between" style={{ fontSize: "4vw" }}>
 				<p className='text-white'>Favorites</p>
-				<a className='text-success' href="">See All</a>
+				<a className='text-success' href="/clientFavourite">See All</a>
 			</div>
 			<div className="row" style={{ marginTop: "8vw" }}>
 				<div className="col d-flex justify-content-around">
