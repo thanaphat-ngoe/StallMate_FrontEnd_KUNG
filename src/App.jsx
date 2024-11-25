@@ -20,6 +20,7 @@ import Loading from './Loading';
 import OwnerLogin from './ownerPages/OwnerLogin';
 import OwnerProfile from './ownerPages/OwnerProfile';
 import OwnerEditProfile from './ownerPages/OwnerEditProfile';
+import OwnerStallMenu from './ownerPages/OwnerStallMenu';
 // import OwnerStallMenu from './ownerPages/OwnerStallMenu';
 import OwnerOrderQueue from './ownerPages/OwnerOrderQueue';
 
@@ -72,8 +73,8 @@ function App() {
 					<Route path="/ownerProfile" element={  <OwnerProfile/> }/>
 					<Route path="/ownerEditProfile" element={  <OwnerEditProfile/> }/>
 					<Route path="/ownerOrderQueue" element = { <OwnerOrderQueue />} />
+					<Route path="/ownerStallMenu" element = { <OwnerStallMenu />} />
         		</Route>
-
 
       		</Routes>
     	</Router>
