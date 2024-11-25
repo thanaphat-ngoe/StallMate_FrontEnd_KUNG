@@ -31,7 +31,7 @@ const StallInfo = ({ ownerID }) => {
   }, []);  
 
 
-  const [selectedDay, setSelectedDay] = useState('Monday-Friday');
+  const [selectedDay, setSelectedDay] = useState('Monday');
 
   const handleDayChange = (e) => {
     setSelectedDay(e.target.value);
